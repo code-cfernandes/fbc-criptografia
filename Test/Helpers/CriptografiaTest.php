@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Core\Test\Helpers;
+namespace Application\Test\Helpers;
 
 use Application\Core\Helpers\Criptografia;
 use RuntimeException;
@@ -8,21 +8,22 @@ use RuntimeException;
 /** Testes de ida e volta da criptografia NKC. */
 final class CriptografiaTest
 {
-    public function run(int $iterations = 5): void
+    public function run(array $iterations = []): void
     {
-        if ($iterations < 1) {
+        if (empty($iterations)) {
             throw new \InvalidArgumentException('A quantidade de testes deve ser maior que zero.');
         }
 
-        for ($i = 0; $i < $iterations; $i++) {
-            $this->testEncryptDecrypt("Texto de teste {$i}");
+        foreach ($iterations as $i) {
+            $this->testEncryptDecrypt($i);
         }
     }
 
     public function testEncryptDecrypt(string $originalText): void
     {
-        $encryptedText = Criptografia::iaCriptNKC($originalText);
-        $decryptedText = Criptografia::iaDecriptNKC($encryptedText);
+        $encryptedText = Criptografia::encrypt($originalText);
+        $decryptedText = Criptografia::decrypt($encryptedText);
+        echo "- $originalText: $encryptedText -> $decryptedText\n";
 
         if ($originalText !== $decryptedText) {
             throw new RuntimeException('O texto descriptografado não corresponde ao texto original.');
