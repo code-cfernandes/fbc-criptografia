@@ -14,7 +14,7 @@ const raiz = join(dirname(fileURLToPath(import.meta.url)), '..');
 const detalhado = process.argv.includes('--detalhado') || process.argv.includes('-v');
 
 // Ordem de exibição (as demais entram em ordem alfabética no fim).
-const ORDEM = ['php', 'node', 'typescript', 'python', 'bash', 'java', 'go', 'rust', 'dart', 'julia'];
+const ORDEM = ['php', 'node', 'typescript', 'python', 'java', 'go', 'rust', 'dart', 'julia', 'bash'];
 
 function listarPacotes() {
   const pacotes = [];
