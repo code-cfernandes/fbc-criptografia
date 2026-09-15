@@ -2,8 +2,8 @@
   "name": "@criptografia/python",
   "version": "0.0.0",
   "private": true,
-  "description": "Implementação da cifra NKC em Python (suíte de ataques ainda não implementada).",
+  "description": "Implementação da cifra NKC em Python com a suíte de ataques.",
   "scripts": {
-    "test": "python3 -c \"import sys; sys.stderr.write('Suíte de ataques ainda não implementada para Python.\\n'); sys.exit(1)\""
+    "test": "python3 bin/executar_testes.py"
   }
 }
