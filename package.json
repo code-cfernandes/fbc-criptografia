@@ -20,6 +20,7 @@
     "test:dart": "time pnpm --filter @criptografia/dart test",
     "test:julia": "time pnpm --filter @criptografia/julia test",
     "typecheck:typescript": "pnpm --filter @criptografia/typescript typecheck",
-    "versao": "node scripts/bump-versao.mjs"
+    "versao": "node scripts/bump-versao.mjs",
+    "tag": "bash scripts/criar-tag.sh"
   }
 }

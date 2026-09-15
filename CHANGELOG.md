@@ -39,5 +39,3 @@ Primeira versão estável da suíte completa.
 
 - `AtaqueMac` não considera mais o valor original do byte na força bruta (que
   reconstruía o próprio token válido e gerava falso positivo).
-
-[1.0.0]: https://example.com/criptografia/releases/tag/v1.0.0
