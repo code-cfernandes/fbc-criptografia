@@ -29,7 +29,7 @@ bin/
 
 ```bash
 bash bin/executar_testes.sh
-NKC_ESCALA=10 bash bin/executar_testes.sh   # mais amostras (mais lento)
+FBC_ESCALA=10 bash bin/executar_testes.sh   # mais amostras (mais lento)
 # ou, da raiz do monorepo:
 pnpm test:bash
 ```
@@ -85,7 +85,7 @@ Registre a função no array `ATAQUES` em `bin/executar_testes.sh`.
   espaço (ex.: `"70 66 67"`), porque bash não representa `0x00` em strings.
 - **Ponto flutuante** usa `awk` (helpers `util_div`, `util_pct`, `util_menor`,
   `util_maior`, `util_fmt`).
-- **Amostras reduzidas** por padrão (bash é muito mais lento). `NKC_ESCALA`
+- **Amostras reduzidas** por padrão (bash é muito mais lento). `FBC_ESCALA`
   multiplica os defaults; ao aumentar, reescale limiares estatísticos.
 - **NUL**: `AtaqueIdaEVoltaBinario` testa os bytes 1..255 (NUL é irrepresentável).
 - O `gerar_keystream` e o `checksum` têm o "passo" e as rotações embutidos nos

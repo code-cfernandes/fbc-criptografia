@@ -2,14 +2,15 @@
 
 ![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?logo=php&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-7+-3178C6?logo=typescript&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-4.3+-4EAA25?logo=gnubash&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)
 ![ataques](https://img.shields.io/badge/ataques-40%2F40-success)
 
-Monorepo educacional com a mesma cifra caseira ("FBC") implementada em quatro
-linguagens — **PHP, Node.js, Python e Bash** — e uma suíte com **40 ataques
-criptográficos** que roda contra cada implementação.
+Monorepo educacional com a mesma cifra caseira ("FBC") implementada em cinco
+pacotes — **PHP, Node.js, TypeScript, Python e Bash** — e uma suíte com
+**40 ataques criptográficos** que roda contra cada implementação.
 
 > **Aviso:** é uma cifra caseira, feita para estudo e para exercitar o raciocínio
 > de criptoanálise. Ela **não** foi revisada e **não** deve ser usada em produção.
@@ -50,16 +51,18 @@ A chave deve ter exatamente **32 bytes** e é lida da variável de ambiente
 ├── package.json            # raiz do workspace pnpm
 ├── pnpm-workspace.yaml
 └── packages/
-    ├── php/     src/Core  src/Seguranca/{Ataques}  bin  tests
-    ├── node/    src/Core  src/Seguranca/{Ataques}  bin
-    ├── python/  src/Core  src/Seguranca/{Ataques}  bin
-    └── bash/    src/Core  src/Seguranca/{Ataques}  bin
+    ├── php/         src/Core  src/Seguranca/{Ataques}  bin  tests
+    ├── node/        src/Core  src/Seguranca/{Ataques}  bin
+    ├── typescript/  src/Core  src/Seguranca/{Ataques}  bin
+    ├── python/      src/Core  src/Seguranca/{Ataques}  bin
+    └── bash/        src/Core  src/Seguranca/{Ataques}  bin
 ```
 
 | Pacote | Linguagem | README |
 | --- | --- | --- |
 | `packages/php` | PHP 8.3+ | [packages/php/README.md](packages/php/README.md) |
 | `packages/node` | Node.js 20+ | [packages/node/README.md](packages/node/README.md) |
+| `packages/typescript` | TypeScript 7+ | [packages/typescript/README.md](packages/typescript/README.md) |
 | `packages/python` | Python 3.12+ | [packages/python/README.md](packages/python/README.md) |
 | `packages/bash` | Bash 4.3+ | [packages/bash/README.md](packages/bash/README.md) |
 
@@ -90,6 +93,7 @@ Ou individualmente:
 ```bash
 pnpm test:php
 pnpm test:node
+pnpm test:typescript
 pnpm test:python
 pnpm test:bash
 ```
@@ -110,6 +114,17 @@ cd packages/node
 node bin/executar_testes.js
 ```
 
+### TypeScript
+
+Roda `.ts` direto no Node 24 (type stripping), sem build. O `tsc` é usado só
+para checagem de tipos.
+
+```bash
+cd packages/typescript
+node bin/executar_testes.ts
+pnpm typecheck          # tsc --noEmit
+```
+
 ### Python
 
 ```bash
@@ -122,11 +137,11 @@ python3 bin/executar_testes.py
 ```bash
 cd packages/bash
 bash bin/executar_testes.sh
-NKC_ESCALA=10 bash bin/executar_testes.sh   # mais amostras (mais lento)
+FBC_ESCALA=10 bash bin/executar_testes.sh   # mais amostras (mais lento)
 ```
 
 O bash usa amostras reduzidas por padrão (é ordens de magnitude mais lento). A
-variável `NKC_ESCALA` multiplica esses defaults.
+variável `FBC_ESCALA` multiplica esses defaults.
 
 ## Uso da cifra
 
@@ -145,6 +160,16 @@ Node.js:
 process.env.FBC_KEY = 'uma-chave-de-32-bytes-aqui-ok!!';
 
 const { encrypt, decrypt } = require('./packages/node/src/Core/Criptografia.js');
+const token = encrypt('texto secreto');
+const texto = decrypt(token);
+```
+
+TypeScript (ESM, sem build):
+
+```ts
+process.env.FBC_KEY = 'uma-chave-de-32-bytes-aqui-ok!!';
+
+import { encrypt, decrypt } from './packages/typescript/src/Core/Criptografia.ts';
 const token = encrypt('texto secreto');
 const texto = decrypt(token);
 ```
@@ -242,6 +267,7 @@ Resumo por linguagem (detalhes no README de cada pacote):
 | --- | --- | --- |
 | PHP | `src/Seguranca/Ataques/AtaqueX.php` | implementa `AtaqueInterface` (`nome`, `executar`) |
 | Node | `src/Seguranca/Ataques/AtaqueX.js` | classe com `nome()` e `executar(alvo)` |
+| TypeScript | `src/Seguranca/Ataques/AtaqueX.ts` | classe que implementa `AtaqueInterface` |
 | Python | `src/Seguranca/Ataques/AtaqueX.py` | classe com `nome()` e `executar(alvo)` |
 | Bash | `src/Seguranca/Ataques/AtaqueX.sh` | função `AtaqueX` que preenche `ATQ_*` |
 
@@ -251,7 +277,7 @@ em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Resultado atual
 
-As quatro implementações resistem aos 40 ataques. Como as linguagens compartilham
+As cinco implementações resistem aos 40 ataques. Como as linguagens compartilham
 a mesma lógica byte a byte, o vetor de referência (chave `"K"` × 32, IV zero,
 propósito `enc`, 32 bytes) é idêntico em todas:
 
@@ -268,6 +294,10 @@ propósito `enc`, 32 bytes) é idêntico em todas:
   embutidos nos laços (sem subshells), o que deixou a cifra ~24x mais rápida
   mantendo a saída byte a byte idêntica. Os ataques usam `awk` para ponto
   flutuante e amostras reduzidas.
+- **TypeScript**: o pacote roda sem build (Node 24 faz type stripping dos `.ts`);
+  o `tsc` entra só como `typecheck`. Os contratos (`AlvoCriptografico`,
+  `AtaqueInterface`, `ResultadoAtaque`) são tipados, com `strict` +
+  `erasableSyntaxOnly`.
 - **`AtaqueIdaEVoltaBinario` no bash** testa os bytes 1..255: bash não representa
   NUL em strings.
 - **PHP** usa autoload PSR-4 (`Application\` → `src/`) e o script

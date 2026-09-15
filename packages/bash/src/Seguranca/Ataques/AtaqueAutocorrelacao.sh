@@ -9,7 +9,7 @@ AtaqueAutocorrelacao() {
     # Reduzido de 8192 para 2048 bytes (bash é ordens de magnitude mais lento).
     # 2048 mantém o limite fFBC de 0.10 a ~4.5 desvios-padrão de ruído
     # (SE ~ 1/sqrt(n)), evitando falsos positivos do limiar calibrado p/ 8192.
-    local tamanho=$(( 2048 * NKC_ESCALA ))
+    local tamanho=$(( 2048 * FBC_ESCALA ))
     local tamanho_bloco=32
 
     local -a chave=()

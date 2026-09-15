@@ -1,0 +1,16 @@
+{
+  "name": "@criptografia/typescript",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Implementação da cifra FBC em TypeScript com a suíte de ataques.",
+  "main": "src/Core/Criptografia.ts",
+  "scripts": {
+    "test": "node bin/executar_testes.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^7.0.2"
+  }
+}

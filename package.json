@@ -12,6 +12,8 @@
     "test:php": "pnpm --filter @criptografia/php test",
     "test:node": "pnpm --filter @criptografia/node test",
     "test:python": "pnpm --filter @criptografia/python test",
-    "test:bash": "pnpm --filter @criptografia/bash test"
+    "test:typescript": "pnpm --filter @criptografia/typescript test",
+    "test:bash": "pnpm --filter @criptografia/bash test",
+    "typecheck:typescript": "pnpm --filter @criptografia/typescript typecheck"
   }
 }

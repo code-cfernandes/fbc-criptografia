@@ -10,7 +10,7 @@ a suíte **verde**.
 | Ferramenta | Versão |
 | --- | --- |
 | PHP + Composer | 8.3+ |
-| Node.js + pnpm | 20+ / 11+ |
+| Node.js + pnpm | 24+ / 11+ (TypeScript roda sem build) |
 | Python | 3.12+ |
 | Bash | 4.3+ |
 
@@ -19,7 +19,8 @@ a suíte **verde**.
 ```bash
 pnpm install
 pnpm test            # todas as linguagens (continua mesmo se uma falhar)
-pnpm test:php        # ou test:node / test:python / test:bash
+pnpm test:php        # ou test:node / test:typescript / test:python / test:bash
+pnpm typecheck:typescript   # tsc --noEmit do pacote TS
 ```
 
 Cada suíte imprime um relatório e termina com código de saída `0` quando nenhum
@@ -113,6 +114,33 @@ module.exports = AtaqueX;
 Registre em `packages/node/bin/executar_testes.js` com
 `.adicionar(new AtaqueX())`.
 
+### TypeScript
+
+Crie `packages/typescript/src/Seguranca/Ataques/AtaqueX.ts` implementando
+`AtaqueInterface`:
+
+```ts
+import { ResultadoAtaque } from '../ResultadoAtaque.ts';
+import { SkipAtaqueException } from '../SkipAtaqueException.ts';
+import type { AlvoCriptografico } from '../AlvoCriptografico.ts';
+import type { AtaqueInterface } from '../AtaqueInterface.ts';
+
+export class AtaqueX implements AtaqueInterface {
+  nome(): string {
+    return 'Nome exibido no relatório';
+  }
+
+  executar(alvo: AlvoCriptografico): ResultadoAtaque {
+    // ... seu ataque ...
+    return new ResultadoAtaque(this.nome(), false, 'info', 'detalhes');
+  }
+}
+```
+
+Registre em `packages/typescript/bin/executar_testes.ts` com
+`.adicionar(new AtaqueX())` e rode `pnpm typecheck` (strict +
+`verbatimModuleSyntax` + `erasableSyntaxOnly`).
+
 ### Python
 
 Crie `packages/python/src/Seguranca/Ataques/AtaqueX.py`:
@@ -164,13 +192,14 @@ Registre o nome da função no array `ATAQUES` em
 - Ataques devem ser **determinísticos o suficiente** para não gerar falsos
   positivos. Ao reduzir amostras (necessário no Bash), reescale limiares
   estatísticos proporcionalmente a `1/sqrt(n)`.
-- No Bash, use `awk` para ponto flutuante e a global `NKC_ESCALA` para escalar
+- No Bash, use `awk` para ponto flutuante e a global `FBC_ESCALA` para escalar
   amostras.
 - Não comite segredos: o `.env` é ignorado pelo git.
 
 ## Checklist antes de abrir um PR
 
 - [ ] O novo ataque está registrado no runner da(s) linguagem(ns) afetada(s).
-- [ ] `pnpm test` passa nas quatro linguagens.
-- [ ] Se a cifra mudou, o vetor de referência é o mesmo nas quatro.
+- [ ] `pnpm test` passa nas cinco linguagens.
+- [ ] `pnpm typecheck:typescript` passa sem erros nem casts desnecessários.
+- [ ] Se a cifra mudou, o vetor de referência é o mesmo nas cinco.
 - [ ] Nomes e mensagens em português, sem segredos.
