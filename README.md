@@ -5,12 +5,20 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-7+-3178C6?logo=typescript&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-4.3+-4EAA25?logo=gnubash&logoColor=white)
+![Java](https://img.shields.io/badge/Java-21+-ED8B00?logo=openjdk&logoColor=white)
+![Go](https://img.shields.io/badge/Go-1.27+-00ADD8?logo=go&logoColor=white)
+![Rust](https://img.shields.io/badge/Rust-1.98+-000000?logo=rust&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-3.13+-0175C2?logo=dart&logoColor=white)
+![Julia](https://img.shields.io/badge/Julia-1.13+-9558B2?logo=julia&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)
 ![ataques](https://img.shields.io/badge/ataques-50%2F50-success)
 
-Monorepo educacional com a mesma cifra caseira ("FBC") implementada em cinco
-pacotes — **PHP, Node.js, TypeScript, Python e Bash** — e uma suíte com
-**50 ataques criptográficos** que roda contra cada implementação.
+Monorepo educacional com a mesma cifra caseira ("FBC") implementada em dez
+pacotes — **PHP, Node.js, TypeScript, Python, Bash, Java, Go, Rust, Dart e
+Julia** — e uma suíte com **50 ataques criptográficos** que roda contra cada
+implementação. As cinco primeiras linguagens cobrem os 50 ataques; Java, Go,
+Rust, Dart e Julia estão na **fase 1** (cifra + 8 ataques), com o restante em
+portabilidade.
 
 > **Aviso:** é uma cifra caseira, feita para estudo e para exercitar o raciocínio
 > de criptoanálise. Ela **não** foi revisada e **não** deve ser usada em produção.
@@ -43,6 +51,11 @@ A chave deve ter exatamente **32 bytes** e é lida da variável de ambiente
 | Node.js + pnpm | 20+ / 11+ |
 | Python | 3.12+ |
 | Bash | 4.3+ (namerefs) |
+| Java | 21+ |
+| Go | 1.27+ |
+| Rust | 1.98+ (linker `cc`) |
+| Dart | 3.13+ |
+| Julia | 1.13+ |
 
 ## Estrutura
 
@@ -55,24 +68,33 @@ A chave deve ter exatamente **32 bytes** e é lida da variável de ambiente
     ├── node/        src/Core  src/Seguranca/{Ataques}  bin
     ├── typescript/  src/Core  src/Seguranca/{Ataques}  bin
     ├── python/      src/Core  src/Seguranca/{Ataques}  bin
-    └── bash/        src/Core  src/Seguranca/{Ataques}  bin
+    ├── bash/        src/Core  src/Seguranca/{Ataques}  bin
+    ├── java/        src/main/java/fbc/{Core,Seguranca/Ataques}  bin
+    ├── go/          internal/{core,seguranca/Ataques}  cmd/executar
+    ├── rust/        src/{core,seguranca/Ataques}
+    ├── dart/        lib/{Core,Seguranca/Ataques}  bin
+    └── julia/       src/{Core,Seguranca/Ataques}  bin
 ```
 
-| Pacote | Linguagem | README |
-| --- | --- | --- |
-| `packages/php` | PHP 8.3+ | [packages/php/README.md](packages/php/README.md) |
-| `packages/node` | Node.js 20+ | [packages/node/README.md](packages/node/README.md) |
-| `packages/typescript` | TypeScript 7+ | [packages/typescript/README.md](packages/typescript/README.md) |
-| `packages/python` | Python 3.12+ | [packages/python/README.md](packages/python/README.md) |
-| `packages/bash` | Bash 4.3+ | [packages/bash/README.md](packages/bash/README.md) |
+| Pacote | Linguagem | Ataques | README |
+| --- | --- | --- | --- |
+| `packages/php` | PHP 8.3+ | 50 | [README](packages/php/README.md) |
+| `packages/node` | Node.js 20+ | 50 | [README](packages/node/README.md) |
+| `packages/typescript` | TypeScript 7+ | 50 | [README](packages/typescript/README.md) |
+| `packages/python` | Python 3.12+ | 50 | [README](packages/python/README.md) |
+| `packages/bash` | Bash 4.3+ | 50 | [README](packages/bash/README.md) |
+| `packages/java` | Java 21+ | 8 (fase 1) | [README](packages/java/README.md) |
+| `packages/go` | Go 1.27+ | 8 (fase 1) | [README](packages/go/README.md) |
+| `packages/rust` | Rust 1.98+ | 8 (fase 1) | [README](packages/rust/README.md) |
+| `packages/dart` | Dart 3.13+ | 8 (fase 1) | [README](packages/dart/README.md) |
+| `packages/julia` | Julia 1.13+ | 8 (fase 1) | [README](packages/julia/README.md) |
 
-Cada pacote segue a mesma organização:
-
-- `src/Core/` — a cifra (`encrypt` / `decrypt`).
-- `src/Seguranca/` — infraestrutura da suíte: `CriptografiaAlvo`,
-  `ResultadoAtaque`, `SuiteDeAtaques` e utilitários.
-- `src/Seguranca/Ataques/` — os 50 ataques, um por arquivo.
-- `bin/executar_testes.*` — runner que executa a suíte e imprime o relatório.
+Todos os pacotes têm a mesma arquitetura conceitual: uma pasta `Core` com a
+cifra, uma pasta `Seguranca` com a infraestrutura da suíte (`CriptografiaAlvo`,
+`ResultadoAtaque`, `SuiteDeAtaques`, utilitários) e uma pasta `Ataques` com os
+ataques, além de um runner (`bin/executar_testes.*`, `cmd/executar`, etc.) que
+imprime o relatório. Os caminhos exatos seguem o layout idiomático de cada
+linguagem (mostrado acima).
 
 ## Como rodar
 
@@ -96,6 +118,11 @@ pnpm test:node
 pnpm test:typescript
 pnpm test:python
 pnpm test:bash
+pnpm test:java
+pnpm test:go
+pnpm test:rust
+pnpm test:dart
+pnpm test:julia
 ```
 
 ### PHP
@@ -142,6 +169,41 @@ FBC_ESCALA=10 bash bin/executar_testes.sh   # mais amostras (mais lento)
 
 O bash usa amostras reduzidas por padrão (é ordens de magnitude mais lento). A
 variável `FBC_ESCALA` multiplica esses defaults.
+
+### Java
+
+```bash
+cd packages/java
+bash bin/executar_testes.sh   # compila (javac) e roda
+```
+
+### Go
+
+```bash
+cd packages/go
+go run ./cmd/executar
+```
+
+### Rust
+
+```bash
+cd packages/rust
+cargo run --quiet
+```
+
+### Dart
+
+```bash
+cd packages/dart
+dart run bin/executar_testes.dart
+```
+
+### Julia
+
+```bash
+cd packages/julia
+julia --startup-file=no bin/executar_testes.jl
+```
 
 ## Uso da cifra
 
@@ -257,7 +319,7 @@ Os 50 ataques:
 
 ## Como escrever um novo ataque
 
-O contrato é o mesmo nas quatro linguagens: um ataque expõe um nome e um método
+O contrato é o mesmo nas dez linguagens: um ataque expõe um nome e um método
 `executar(alvo)` que devolve um `ResultadoAtaque` (vulnerável, severidade,
 detalhes). Ele recebe um **alvo** (`CriptografiaAlvo`) que abstrai a cifra e
 oferece:
@@ -280,6 +342,11 @@ Resumo por linguagem (detalhes no README de cada pacote):
 | TypeScript | `src/Seguranca/Ataques/AtaqueX.ts` | classe que implementa `AtaqueInterface` |
 | Python | `src/Seguranca/Ataques/AtaqueX.py` | classe com `nome()` e `executar(alvo)` |
 | Bash | `src/Seguranca/Ataques/AtaqueX.sh` | função `AtaqueX` que preenche `ATQ_*` |
+| Java | `src/main/java/fbc/Seguranca/Ataques/AtaqueX.java` | implementa `AtaqueInterface` |
+| Go | `internal/seguranca/ataques/ataque_x.go` | implementa a interface `Ataque` |
+| Rust | `src/seguranca/ataques/ataque_x.rs` | implementa o trait `Ataque` |
+| Dart | `lib/Seguranca/Ataques/AtaqueX.dart` | estende a classe abstrata `Ataque` |
+| Julia | `src/Seguranca/Ataques/AtaqueX.jl` | subtipo do tipo abstrato `Ataque` |
 
 Depois de criar o arquivo, registre o ataque no runner (`bin/executar_testes.*`)
 e rode a suíte. O passo a passo completo (testes locais, estilo e checklist) está
@@ -287,17 +354,21 @@ em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Resultado atual
 
-As cinco implementações resistem aos 50 ataques. Como as linguagens compartilham
-a mesma lógica byte a byte, o vetor de referência (chave `"K"` × 32, IV zero,
-propósito `enc`, 32 bytes) é idêntico em todas:
+As dez implementações resistem aos ataques que já cobrem (50 nas linguagens da
+fase completa, 8 nas da fase 1). Como todas compartilham a mesma lógica byte a
+byte, o vetor de referência (chave `"K"` × 32, IV zero, propósito `enc`,
+32 bytes) é idêntico em todas:
 
 ```
 219a73a5bdb588b63187fa656d1492e0728c73ef526f6c525cf37cfb0f125249
 ```
 
+A interoperabilidade é verificada explicitamente: tokens gerados por qualquer
+implementação decifram nas demais (ataque `AtaqueInteroperabilidade`).
+
 ## Notas de implementação
 
-- **Distâncias de difusão dobradas** (`[3,5,11,19,41,3,5,11,19,41]`) nas quatro
+- **Distâncias de difusão dobradas** (`[3,5,11,19,41,3,5,11,19,41]`) em todas as
   linguagens: ajuste que faz o ataque integral (soma balanceada) deixar de
   distinguir a cifra de uma função aleatória.
 - **Bash**: o `gerar_keystream` e o `checksum` têm as rotações e o "passo"
@@ -312,3 +383,11 @@ propósito `enc`, 32 bytes) é idêntico em todas:
   NUL em strings.
 - **PHP** usa autoload PSR-4 (`Application\` → `src/`) e o script
   `bin/runTest.php` carrega a chave via `.env` (veja `src/Env/DotEnv.php`).
+- **Fase 1 (Java/Go/Rust/Dart/Julia)**: cobrem a cifra, a infraestrutura e 8
+  ataques (ida-e-volta, adulteração, determinismo, interoperabilidade, colisão
+  de IV, bytes fixos, chave errada e validação de chave). O restante dos ataques
+  será portado na fase 2. Cada runner já sai com código `!= 0` se achar
+  vulnerabilidade.
+- **Toolchains**: Go/Rust/Dart/Julia foram instalados user-local (sem root);
+  Rust usa o linker `cc` (wrapper do `zig cc`) por não haver `gcc`/`clang` no
+  sistema.

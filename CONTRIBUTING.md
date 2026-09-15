@@ -1,9 +1,11 @@
 # Contribuindo
 
 Obrigado pelo interesse. Este é um projeto educacional: a cifra "FBC" é
-implementada em PHP, Node.js, TypeScript, Python e Bash, e uma mesma suíte de 50 ataques roda
-contra todas. O objetivo é manter as quatro versões **compatíveis byte a byte** e
-a suíte **verde**.
+implementada em dez linguagens (PHP, Node.js, TypeScript, Python, Bash, Java,
+Go, Rust, Dart e Julia) e uma mesma suíte de ataques roda contra todas. As cinco
+primeiras já cobrem os **50 ataques**; Java, Go, Rust, Dart e Julia estão na
+**fase 1** (cifra + 8 ataques). O objetivo é manter todas **compatíveis byte a
+byte** e a suíte **verde**.
 
 ## Pré-requisitos
 
@@ -13,6 +15,11 @@ a suíte **verde**.
 | Node.js + pnpm | 24+ / 11+ (TypeScript roda sem build) |
 | Python | 3.12+ |
 | Bash | 4.3+ |
+| Java | 21+ |
+| Go | 1.27+ |
+| Rust | 1.98+ (linker `cc`) |
+| Dart | 3.13+ |
+| Julia | 1.13+ |
 
 ## Rodando os testes
 
@@ -20,6 +27,7 @@ a suíte **verde**.
 pnpm install
 pnpm test            # todas as linguagens (continua mesmo se uma falhar)
 pnpm test:php        # ou test:node / test:typescript / test:python / test:bash
+pnpm test:java       # ou test:go / test:rust / test:dart / test:julia
 pnpm typecheck:typescript   # tsc --noEmit do pacote TS
 ```
 
@@ -180,11 +188,26 @@ AtaqueX() {
 Registre o nome da função no array `ATAQUES` em
 `packages/bash/bin/executar_testes.sh`.
 
+### Java / Go / Rust / Dart / Julia (fase 1)
+
+Essas linguagens já têm a cifra, a infraestrutura e 8 ataques. O padrão é o
+mesmo (um alvo + `nome()`/`executar(alvo)` + registro no runner), mas com o
+layout idiomático de cada uma:
+
+- Java: `src/main/java/fbc/Seguranca/Ataques/AtaqueX.java` (implementa `AtaqueInterface`), registre em `Main.java`.
+- Go: `internal/seguranca/ataques/ataque_x.go` (interface `Ataque`), registre em `cmd/executar/main.go`.
+- Rust: `src/seguranca/ataques/ataque_x.rs` (trait `Ataque`), registre em `src/main.rs`.
+- Dart: `lib/Seguranca/Ataques/AtaqueX.dart` (estende `Ataque`), registre em `bin/executar_testes.dart`.
+- Julia: `src/Seguranca/Ataques/AtaqueX.jl` (subtipo de `Ataque`), registre em `bin/executar_testes.jl`.
+
+Veja o README de cada pacote para detalhes. Os ataques da fase 2 devem ser
+portados com os mesmos nomes e limiares das outras linguagens.
+
 ## Convenções
 
 - Mantenha os comentários e mensagens em **português**.
 - Preserve a compatibilidade **byte a byte** entre as implementações. Ao mudar a
-  cifra, mude nas quatro e verifique o vetor de referência do
+  cifra, mude em todas e verifique o vetor de referência do
   `AtaqueVetorDeterministico` (chave `"K"` × 32, IV zero, propósito `enc`,
   32 bytes): `219a73a5bdb588b63187fa656d1492e0728c73ef526f6c525cf37cfb0f125249`.
 - Dados binários: use `Buffer` (Node), `bytes`/`bytearray` (Python), arrays de
@@ -199,7 +222,7 @@ Registre o nome da função no array `ATAQUES` em
 ## Checklist antes de abrir um PR
 
 - [ ] O novo ataque está registrado no runner da(s) linguagem(ns) afetada(s).
-- [ ] `pnpm test` passa nas cinco linguagens.
+- [ ] `pnpm test` passa em todas as linguagens.
 - [ ] `pnpm typecheck:typescript` passa sem erros nem casts desnecessários.
-- [ ] Se a cifra mudou, o vetor de referência é o mesmo nas cinco.
+- [ ] Se a cifra mudou, o vetor de referência é o mesmo em todas.
 - [ ] Nomes e mensagens em português, sem segredos.

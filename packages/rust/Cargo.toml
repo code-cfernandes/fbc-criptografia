@@ -1,0 +1,12 @@
+[package]
+name = "criptografia-rust"
+version = "0.0.0"
+edition = "2021"
+description = "Implementação da cifra FBC em Rust com a suíte de ataques."
+publish = false
+
+[[bin]]
+name = "criptografia-rust"
+path = "src/main.rs"
+
+[dependencies]

@@ -1,0 +1,7 @@
+{
+  "name": "@criptografia/java",
+  "private": true,
+  "scripts": {
+    "test": "bash bin/executar_testes.sh"
+  }
+}

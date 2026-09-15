@@ -10,11 +10,21 @@ importers:
 
   packages/bash: {}
 
+  packages/dart: {}
+
+  packages/go: {}
+
+  packages/java: {}
+
+  packages/julia: {}
+
   packages/node: {}
 
   packages/php: {}
 
   packages/python: {}
+
+  packages/rust: {}
 
   packages/typescript:
     devDependencies:

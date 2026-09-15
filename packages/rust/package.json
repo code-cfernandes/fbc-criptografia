@@ -1,0 +1,9 @@
+{
+  "name": "@criptografia/rust",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Implementação da cifra FBC em Rust com a suíte de ataques.",
+  "scripts": {
+    "test": "cargo run --quiet"
+  }
+}

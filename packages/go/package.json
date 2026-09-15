@@ -1,0 +1,9 @@
+{
+  "name": "@criptografia/go",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Implementação da cifra FBC em Go com a suíte de ataques.",
+  "scripts": {
+    "test": "go run ./cmd/executar"
+  }
+}

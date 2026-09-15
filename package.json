@@ -14,6 +14,11 @@
     "test:python": "pnpm --filter @criptografia/python test",
     "test:typescript": "pnpm --filter @criptografia/typescript test",
     "test:bash": "pnpm --filter @criptografia/bash test",
+    "test:java": "pnpm --filter @criptografia/java test",
+    "test:go": "pnpm --filter @criptografia/go test",
+    "test:rust": "pnpm --filter @criptografia/rust test",
+    "test:dart": "pnpm --filter @criptografia/dart test",
+    "test:julia": "pnpm --filter @criptografia/julia test",
     "typecheck:typescript": "pnpm --filter @criptografia/typescript typecheck"
   }
 }
