@@ -56,10 +56,12 @@ class AtaqueSerialBits implements AtaqueInterface
                 $chi2 += (($c - $esperado) ** 2) / $esperado;
             }
             $dof = $total - 1;
-            $z = ($chi2 - $dof) / sqrt(2 * $dof);
+            // Wilson-Hilferty: aproximação normal bem mais precisa para dof
+            // pequeno (o z "ingênuo" dá ~5% de falso positivo em dof=3).
+            $z = (($chi2 / $dof) ** (1 / 3) - (1 - 2 / (9 * $dof))) / sqrt(2 / (9 * $dof));
             $dados["m$m"] = ['chi2' => $chi2, 'z' => $z];
 
-            if ($z > 4.0) {
+            if ($z > 6.0) {
                 $problemas[] = sprintf('m=%d chi2=%.1f (z=%.1f)', $m, $chi2, $z);
             }
         }

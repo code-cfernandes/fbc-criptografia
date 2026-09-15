@@ -54,6 +54,16 @@ ATAQUES=(
     AtaqueDistribuicaoPorPosicao
     AtaqueCorrelacaoPosicoes
     AtaquePreditorDeBits
+    AtaqueInteroperabilidade
+    AtaqueSAC
+    AtaqueBIC
+    AtaqueChaveRelacionada
+    AtaqueRotacional
+    AtaqueChavesFracas
+    AtaqueAproximacaoLinear
+    AtaqueCiphertextEstatistico
+    AtaqueMac
+    AtaqueLengthExtension
 )
 
 for ataque in "${ATAQUES[@]}"; do

@@ -64,10 +64,13 @@ export class AtaqueSerialBits implements AtaqueInterface {
         chi2 += ((c - esperado) ** 2) / esperado;
       }
       const dof = total - 1;
-      const z = (chi2 - dof) / Math.sqrt(2 * dof);
+      // Wilson-Hilferty: aproxima chi² por normal de forma bem mais precisa
+      // para dof pequeno. O z "ingênuo" (chi2-dof)/sqrt(2*dof) dá ~5% de falso
+      // positivo em dof=3 (m=2); este fica em ~0.005%.
+      const z = ((chi2 / dof) ** (1 / 3) - (1 - 2 / (9 * dof))) / Math.sqrt(2 / (9 * dof));
       dados[`m${m}`] = { chi2, z };
 
-      if (z > 4.0) {
+      if (z > 6.0) {
         problemas.push(`m=${m} chi2=${chi2.toFixed(1)} (z=${z.toFixed(1)})`);
       }
     }

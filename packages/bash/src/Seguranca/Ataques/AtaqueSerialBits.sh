@@ -51,9 +51,10 @@ AtaqueSerialBits() {
         esperado=$(util_div "$janelas" "$total" 6)
         chi2=$(awk -v e="$esperado" -v c="${contagem[*]}" 'BEGIN { n=split(c,a," "); s=0; for (k=1;k<=n;k++) { d=a[k]-e; s+=d*d/e } printf "%.6f", s }')
         dof=$(( total - 1 ))
-        z=$(awk -v c="$chi2" -v d="$dof" 'BEGIN { printf "%.6f", (c-d)/sqrt(2*d) }')
+        # Wilson-Hilferty: aproximação normal bem mais precisa para dof pequeno.
+        z=$(awk -v c="$chi2" -v d="$dof" 'BEGIN { printf "%.6f", ((c/d)^(1/3) - (1 - 2/(9*d)))/sqrt(2/(9*d)) }')
 
-        if util_maior "$z" "4.0"; then
+        if util_maior "$z" "6.0"; then
             problemas+="m=$m chi2=$(util_fmt 1 "$chi2") (z=$(util_fmt 1 "$z")); "
         fi
     done

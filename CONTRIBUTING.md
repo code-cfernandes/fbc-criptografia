@@ -1,7 +1,7 @@
 # Contribuindo
 
 Obrigado pelo interesse. Este é um projeto educacional: a cifra "FBC" é
-implementada em PHP, Node.js, Python e Bash, e uma mesma suíte de 40 ataques roda
+implementada em PHP, Node.js, TypeScript, Python e Bash, e uma mesma suíte de 50 ataques roda
 contra todas. O objetivo é manter as quatro versões **compatíveis byte a byte** e
 a suíte **verde**.
 

@@ -6,11 +6,11 @@
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-4.3+-4EAA25?logo=gnubash&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)
-![ataques](https://img.shields.io/badge/ataques-40%2F40-success)
+![ataques](https://img.shields.io/badge/ataques-50%2F50-success)
 
 Monorepo educacional com a mesma cifra caseira ("FBC") implementada em cinco
 pacotes — **PHP, Node.js, TypeScript, Python e Bash** — e uma suíte com
-**40 ataques criptográficos** que roda contra cada implementação.
+**50 ataques criptográficos** que roda contra cada implementação.
 
 > **Aviso:** é uma cifra caseira, feita para estudo e para exercitar o raciocínio
 > de criptoanálise. Ela **não** foi revisada e **não** deve ser usada em produção.
@@ -71,7 +71,7 @@ Cada pacote segue a mesma organização:
 - `src/Core/` — a cifra (`encrypt` / `decrypt`).
 - `src/Seguranca/` — infraestrutura da suíte: `CriptografiaAlvo`,
   `ResultadoAtaque`, `SuiteDeAtaques` e utilitários.
-- `src/Seguranca/Ataques/` — os 40 ataques, um por arquivo.
+- `src/Seguranca/Ataques/` — os 50 ataques, um por arquivo.
 - `bin/executar_testes.*` — runner que executa a suíte e imprime o relatório.
 
 ## Como rodar
@@ -202,7 +202,7 @@ Cada ataque implementa `nome()` e `executar(alvo)`, devolvendo um
 relatório e retorna código de saída diferente de zero quando encontra alguma
 vulnerabilidade.
 
-Os 40 ataques:
+Os 50 ataques:
 
 1. Ida-e-volta (round trip)
 2. Ida-e-volta com dados binários (inclui NUL)
@@ -244,6 +244,16 @@ Os 40 ataques:
 38. Determinismo (vetor de referência key/iv fixos)
 39. Timing da verificação de integridade
 40. Bytes fixos entre tokens
+41. Interoperabilidade e vetores conhecidos (KAT)
+42. SAC (Strict Avalanche Criterion)
+43. BIC (Bit Independence Criterion)
+44. Chave relacionada (related-key)
+45. Rotacional/slide (simetria por rotação)
+46. Chaves fracas (busca dirigida)
+47. Aproximação linear (viés de Walsh)
+48. Estatística do ciphertext (chi²/runs/autocorrelação)
+49. Força bruta e truncamento do MAC
+50. Length extension / truncamento de token
 
 ## Como escrever um novo ataque
 
@@ -277,7 +287,7 @@ em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Resultado atual
 
-As cinco implementações resistem aos 40 ataques. Como as linguagens compartilham
+As cinco implementações resistem aos 50 ataques. Como as linguagens compartilham
 a mesma lógica byte a byte, o vetor de referência (chave `"K"` × 32, IV zero,
 propósito `enc`, 32 bytes) é idêntico em todas:
 

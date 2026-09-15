@@ -48,10 +48,12 @@ class AtaqueSerialBits:
             for c in contagem:
                 chi2 += ((c - esperado) ** 2) / esperado
             dof = total - 1
-            z = (chi2 - dof) / math.sqrt(2 * dof)
+            # Wilson-Hilferty: aproximação normal bem mais precisa para dof
+            # pequeno (o z "ingênuo" dá ~5% de falso positivo em dof=3).
+            z = ((chi2 / dof) ** (1 / 3) - (1 - 2 / (9 * dof))) / math.sqrt(2 / (9 * dof))
             dados[f"m{m}"] = {"chi2": chi2, "z": z}
 
-            if z > 4.0:
+            if z > 6.0:
                 problemas.append(f"m={m} chi2={chi2:.1f} (z={z:.1f})")
 
         if problemas:

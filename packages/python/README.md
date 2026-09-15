@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
 
-Implementação da cifra caseira **FBC** em Python, com a suíte de 40 ataques
+Implementação da cifra caseira **FBC** em Python, com a suíte de 50 ataques
 criptográficos. Faz parte do [monorepo Criptografia FBC](../../README.md).
 
 ## Requisitos
@@ -20,7 +20,7 @@ src/
     ├── SkipAtaqueException.py
     ├── SuiteDeAtaques.py
     ├── Util.py
-    └── Ataques/*.py               # 40 ataques
+    └── Ataques/*.py               # 50 ataques
 bin/executar_testes.py             # runner da suíte
 ```
 

@@ -2,7 +2,7 @@
 
 ![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?logo=php&logoColor=white)
 
-Implementação da cifra caseira **FBC** em PHP, com a suíte de 40 ataques
+Implementação da cifra caseira **FBC** em PHP, com a suíte de 50 ataques
 criptográficos. Faz parte do [monorepo Criptografia FBC](../../README.md).
 
 ## Requisitos
@@ -23,7 +23,7 @@ src/
     ├── ResultadoAtaque.php
     ├── SkipAtaqueException.php
     ├── SuiteDeAtaques.php
-    └── Ataques/*.php              # 40 ataques
+    └── Ataques/*.php              # 50 ataques
 bin/
 ├── executar_testes.php            # runner da suíte
 └── runTest.php                    # ida-e-volta básica

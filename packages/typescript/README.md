@@ -26,7 +26,7 @@ src/
     ├── SkipAtaqueException.ts
     ├── SuiteDeAtaques.ts
     ├── Util.ts
-    └── Ataques/*.ts               # 40 ataques
+    └── Ataques/*.ts               # 50 ataques
 bin/
 ├── executar_testes.ts             # runner da suíte
 └── testar_um.ts                   # roda um ataque isolado

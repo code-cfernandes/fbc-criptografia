@@ -2,7 +2,7 @@
 
 ![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)
 
-Implementação da cifra caseira **FBC** em Node.js, com a suíte de 40 ataques
+Implementação da cifra caseira **FBC** em Node.js, com a suíte de 50 ataques
 criptográficos. Faz parte do [monorepo Criptografia FBC](../../README.md).
 
 ## Requisitos
@@ -20,7 +20,7 @@ src/
     ├── SkipAtaqueException.js
     ├── SuiteDeAtaques.js
     ├── Util.js
-    └── Ataques/*.js               # 40 ataques
+    └── Ataques/*.js               # 50 ataques
 bin/executar_testes.js             # runner da suíte
 ```
 

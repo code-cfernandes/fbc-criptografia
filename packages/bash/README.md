@@ -2,7 +2,7 @@
 
 ![Bash](https://img.shields.io/badge/Bash-4.3+-4EAA25?logo=gnubash&logoColor=white)
 
-Implementação da cifra caseira **FBC** em Bash puro, com a suíte de 40 ataques
+Implementação da cifra caseira **FBC** em Bash puro, com a suíte de 50 ataques
 criptográficos. Faz parte do [monorepo Criptografia FBC](../../README.md).
 
 ## Requisitos
@@ -19,7 +19,7 @@ src/
     ├── Util.sh                    # random, popcount, awk helpers
     ├── CriptografiaAlvo.sh        # liga a suíte à cifra
     ├── SuiteDeAtaques.sh
-    └── Ataques/*.sh               # 40 ataques
+    └── Ataques/*.sh               # 50 ataques
 bin/
 ├── executar_testes.sh             # runner da suíte
 └── testar_um.sh                   # roda um ataque isolado
