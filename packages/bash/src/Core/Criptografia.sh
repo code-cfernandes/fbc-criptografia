@@ -1,28 +1,8 @@
 #!/usr/bin/env bash
-#
-# Cifra caseira educacional - porte pra bash puro de Criptografia.php.
-#
-# Estrutura do token: FBC + base64url( integridade[32] . ciphertext[n] . iv[16] )
-#
-# Ver Criptografia.php para os comentários completos sobre o design
-# (difusão tipo butterfly, distâncias Fibonacci->primo, rotação via Pi).
-# Este arquivo replica a lógica byte a byte - qualquer mudança de
-# comportamento aqui quebraria compatibilidade com as outras linguagens.
-#
-# Uso:
-#   export FBC_KEY='sua-chave-de-32-bytes-aqui-ok!!'
-#   ./criptografia.sh encrypt "texto secreto"
-#   ./criptografia.sh decrypt "FBC...token..."
-#
 TAM_BLOCO=32
-DISTANCIAS_DIFUSAO=(3 5 11 19 41 3 5 11 19 41)  # dobrado pra combater ataque integral
+DISTANCIAS_DIFUSAO=(3 5 11 19 41 3 5 11 19 41)
 DIGITOS_PI='31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679'
 
-# ---------------------------------------------------------------
-# Utilitários de bytes <-> string
-# ---------------------------------------------------------------
-
-# Lê bytes de um arquivo/stdin e preenche o array (nameref) com valores 0-255.
 bytes_from_stdin() {
     local -n _out=$1
     _out=()
@@ -42,7 +22,6 @@ string_to_bytes() {
     done < <(printf '%s' "$str" | od -An -v -tu1 | tr -s ' ' '\n' | sed '/^$/d')
 }
 
-# Imprime os bytes do array (todos os argumentos) como binário puro no stdout.
 bytes_to_stdout() {
     local out=""
     local b
@@ -51,10 +30,6 @@ bytes_to_stdout() {
     done
     printf '%b' "$out"
 }
-
-# ---------------------------------------------------------------
-# Base64url
-# ---------------------------------------------------------------
 
 base64url_encode_stdin() {
     base64 -w0 | tr '+/' '-_' | tr -d '='
@@ -81,20 +56,12 @@ base64url_decode_to_array() {
         padded+=$(printf '=%.0s' $(seq 1 "$pad"))
     fi
 
-    # IMPORTANTE: nunca guarda os bytes decodificados numa variável bash
-    # comum - bash não suporta byte 0x00 dentro de uma string (trunca
-    # silenciosamente ali), e IV/ciphertext podem ter zeros com frequência
-    # normal (~1/256 por byte). Fica em "array de decimais" (seguro) o
-    # tempo todo.
     _saida_dec=()
     local val
     while read -r val; do
         _saida_dec+=("$val")
     done < <(printf '%s' "$padded" | base64 -d | od -An -v -tu1 | tr -s ' ' '\n' | sed '/^$/d')
 
-    # Canonicidade: reencoda a partir do array e compara - pega bits
-    # não-canônicos no último grupo do base64 que sobreviveriam mesmo a
-    # uma checagem estrita de alfabeto.
     local reencodado
     reencodado=$(bytes_to_stdout "${_saida_dec[@]}" | base64url_encode_stdin)
     if [ "$reencodado" != "$data" ]; then
@@ -102,10 +69,6 @@ base64url_decode_to_array() {
         return 1
     fi
 }
-
-# ---------------------------------------------------------------
-# NÚCLEO: gerador de keystream com difusão tipo butterfly
-# ---------------------------------------------------------------
 
 rot_esquerda8() {
     local byte=$1 n=$2
@@ -135,7 +98,6 @@ rotacao_do_round() {
     echo $(( (d % 7) + 1 ))
 }
 
-# passo a b pos_fib round_idx proposito_bytes_str key_bytes_str -> "novoA novoB"
 passo() {
     local a=$1 b=$2 pos_fib=$3 round_idx=$4
     local -a prop=($5)
@@ -147,7 +109,6 @@ passo() {
     soma=$(rot_esquerda8 "$soma" "$n")
     local prop_byte=${prop[$(( pos_fib % ${#prop[@]} ))]}
     soma=$(( soma ^ prop_byte ))
-    # A chave participa de CADA rodada, não só do estado inicial.
     local key_byte=${key[$(( (pos_fib + round_idx) % ${#key[@]} ))]}
     soma=$(( soma ^ key_byte ))
     soma=$(( (soma * 131) & 0xFF ))
@@ -155,17 +116,18 @@ passo() {
     echo "$b $soma"
 }
 
-# gerar_keystream nome_saida key_arr_str iv_arr_str proposito_arr_str tamanho
 gerar_keystream() {
     local -n _saida=$1
     local -a key=($2)
     local -a iv=($3)
-    local prop_str=$4
+    local -a prop=($4)
     local tamanho=$5
 
     local bloco=$TAM_BLOCO
     local iv_len=${#iv[@]}
     local key_len=${#key[@]}
+    local prop_len=${#prop[@]}
+    local pi_len=${#DIGITOS_PI}
 
     local -a a b novo_b misturado
     local pos
@@ -177,22 +139,33 @@ gerar_keystream() {
     _saida=()
     local round_idx=0
     local pos_fib_base=0
+    local dist idx d n soma pf apos bpos nb rot
 
     while [ ${#_saida[@]} -lt "$tamanho" ]; do
-        local dist
         for dist in "${DISTANCIAS_DIFUSAO[@]}"; do
+            idx=$(( round_idx % pi_len ))
+            d=${DIGITOS_PI:idx:1}
+            n=$(( (d % 7) + 1 ))
+
             for (( pos = 0; pos < bloco; pos++ )); do
-                local resultado
-                resultado=$(passo "${a[pos]}" "${b[pos]}" "$(( pos_fib_base + pos ))" "$round_idx" "$prop_str" "$2")
-                a[pos]=${resultado% *}
-                novo_b[pos]=${resultado#* }
+                apos=${a[pos]}
+                bpos=${b[pos]}
+                soma=$(( (apos + bpos) & 0xFF ))
+                if [ "$n" -ne 0 ]; then
+                    soma=$(( ((soma << n) | (soma >> (8 - n))) & 0xFF ))
+                fi
+                pf=$(( pos_fib_base + pos ))
+                soma=$(( soma ^ prop[pf % prop_len] ))
+                soma=$(( soma ^ key[(pf + round_idx) % key_len] ))
+                soma=$(( (soma * 131) & 0xFF ))
+                a[pos]=$bpos
+                novo_b[pos]=$soma
             done
 
             for (( pos = 0; pos < bloco; pos++ )); do
-                local vizinho=${novo_b[$(( (pos + dist) % bloco ))]}
-                local rot
-                rot=$(rot_esquerda8 "${novo_b[pos]}" 1)
-                misturado[pos]=$(( rot ^ vizinho ))
+                nb=${novo_b[pos]}
+                rot=$(( ((nb << 1) | (nb >> 7)) & 0xFF ))
+                misturado[pos]=$(( rot ^ novo_b[(pos + dist) % bloco] ))
             done
             for (( pos = 0; pos < bloco; pos++ )); do
                 b[pos]=${misturado[pos]}
@@ -220,7 +193,6 @@ xor_bytes() {
     done
 }
 
-# "MAC" caseiro: 8 rodadas de checksum estilo FNV, concatenadas -> 32 bytes.
 checksum() {
     local -n _saida=$1
     local -a dados=($2)
@@ -229,37 +201,26 @@ checksum() {
     _saida=()
     local key_len=${#key[@]}
     local len=${#dados[@]}
-    local rodada
+    local rodada i k n acumulador byte
 
     for (( rodada = 0; rodada < 8; rodada++ )); do
-        local acumulador=$(( (0x811C9DC5 ^ (rodada * 0x01000193)) & 0xFFFFFFFF ))
-        local i
+        acumulador=$(( (0x811C9DC5 ^ (rodada * 0x01000193)) & 0xFFFFFFFF ))
+
         for (( i = 0; i < len; i++ )); do
-            local byte=$(( dados[i] ^ key[(i + rodada) % key_len] ))
+            byte=$(( dados[i] ^ key[(i + rodada) % key_len] ))
             acumulador=$(( (acumulador ^ byte) & 0xFFFFFFFF ))
-            # bash trata inteiros como 64 bits com sinal - até 0xFFFFFFFF *
-            # 16777619 cabe sem estourar 63 bits, então não precisa de
-            # cuidado extra tipo BigInt (diferente do porte em Node.js).
             acumulador=$(( (acumulador * 16777619) & 0xFFFFFFFF ))
-            local n=$(( (i % 13) + 1 ))
-            acumulador=$(rot_esquerda32 "$acumulador" "$n")
+            n=$(( (i % 13) + 1 ))
+            acumulador=$(( ((acumulador << n) | (acumulador >> (32 - n))) & 0xFFFFFFFF ))
         done
-        # Finalização: sem isso, o último byte processado só passa por 1
-        # multiply+rotate antes de virar saída (avalanche fraca ~25-30%
-        # medida nos últimos bytes do bloco de dados).
-        local k
         for (( k = 0; k < 3; k++ )); do
             acumulador=$(( (acumulador ^ (acumulador >> 16)) & 0xFFFFFFFF ))
             acumulador=$(( (acumulador * 16777619) & 0xFFFFFFFF ))
-            acumulador=$(rot_esquerda32 "$acumulador" 13)
+            acumulador=$(( ((acumulador << 13) | (acumulador >> 19)) & 0xFFFFFFFF ))
         done
         _saida+=( $(( (acumulador >> 24) & 0xFF )) $(( (acumulador >> 16) & 0xFF )) $(( (acumulador >> 8) & 0xFF )) $(( acumulador & 0xFF )) )
     done
 }
-
-# ---------------------------------------------------------------
-# encrypt / decrypt
-# ---------------------------------------------------------------
 
 get_key_bytes() {
     local -n _saida_key=$1
@@ -332,12 +293,6 @@ cripto_decrypt() {
     echo
 }
 
-# ---------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------
-
-# Só roda o CLI se o script for executado diretamente (não quando for
-# "source"ado por outro script, como fazemos pra testar as funções isoladas).
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     set -euo pipefail
     case "${1:-}" in

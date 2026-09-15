@@ -2,7 +2,7 @@
   "name": "@criptografia/python",
   "version": "0.0.0",
   "private": true,
-  "description": "Implementação da cifra NKC em Python com a suíte de ataques.",
+  "description": "Implementação da cifra FBC em Python com a suíte de ataques.",
   "scripts": {
     "test": "python3 bin/executar_testes.py"
   }

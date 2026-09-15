@@ -2,7 +2,7 @@
   "name": "@criptografia/node",
   "version": "0.0.0",
   "private": true,
-  "description": "Implementação da cifra NKC em Node.js com a suíte de ataques.",
+  "description": "Implementação da cifra FBC em Node.js com a suíte de ataques.",
   "main": "src/Core/Criptografia.js",
   "scripts": {
     "test": "node bin/executar_testes.js"

@@ -5,7 +5,7 @@ namespace Application\Tests;
 use Application\Core\Criptografia;
 use RuntimeException;
 
-/** Testes de ida e volta da criptografia NKC. */
+/** Testes de ida e volta da criptografia FBC. */
 final class CriptografiaTest
 {
     public function run(array $iterations = []): void

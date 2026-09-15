@@ -2,7 +2,7 @@
   "name": "criptografia",
   "version": "0.0.0",
   "private": true,
-  "description": "Monorepo com as implementações da cifra NKC em várias linguagens e a suíte de ataques.",
+  "description": "Monorepo com as implementações da cifra FBC em várias linguagens e a suíte de ataques.",
   "packageManager": "pnpm@11.14.0",
   "engines": {
     "node": ">=20"
