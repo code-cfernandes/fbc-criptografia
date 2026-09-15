@@ -2,9 +2,9 @@
   "name": "@criptografia/node",
   "version": "0.0.0",
   "private": true,
-  "description": "Implementação da cifra NKC em Node.js (suíte de ataques ainda não implementada).",
-  "main": "Criptografia.js",
+  "description": "Implementação da cifra NKC em Node.js com a suíte de ataques.",
+  "main": "src/Core/Criptografia.js",
   "scripts": {
-    "test": "node -e \"console.error('Suíte de ataques ainda não implementada para Node.js.'); process.exit(1)\""
+    "test": "node bin/executar_testes.js"
   }
 }
