@@ -19,6 +19,12 @@ use Application\Core\Seguranca\Ataques\AtaqueVetorDeterministico;
 use Application\Core\Seguranca\Ataques\AtaqueTiming;
 use Application\Core\Seguranca\Ataques\AtaqueColisaoChecksum;
 use Application\Core\Seguranca\Ataques\AtaqueEntropiaIV;
+use Application\Core\Seguranca\Ataques\AtaqueAvalancheChave;
+use Application\Core\Seguranca\Ataques\AtaqueAvalancheChecksum;
+use Application\Core\Seguranca\Ataques\AtaqueIndependenciaProposito;
+use Application\Core\Seguranca\Ataques\AtaqueAutocorrelacao;
+use Application\Core\Seguranca\Ataques\AtaqueTokensMalformados;
+use Application\Core\Seguranca\Ataques\AtaqueChaveErrada;
 
 $alvo = new CriptografiaAlvo();
 
@@ -38,7 +44,13 @@ $suite
     ->adicionar(new AtaqueVetorDeterministico())
     ->adicionar(new AtaqueTiming())
     ->adicionar(new AtaqueColisaoChecksum())
-    ->adicionar(new AtaqueEntropiaIV());
+    ->adicionar(new AtaqueEntropiaIV())
+    ->adicionar(new AtaqueAvalancheChave())
+    ->adicionar(new AtaqueAvalancheChecksum())
+    ->adicionar(new AtaqueIndependenciaProposito())
+    ->adicionar(new AtaqueAutocorrelacao())
+    ->adicionar(new AtaqueTokensMalformados())
+    ->adicionar(new AtaqueChaveErrada());
 
 $passou = $suite->rodarEImprimir($alvo);
 

@@ -45,7 +45,7 @@ class Criptografia
         $iv = random_bytes(16);
 
         $encKeystream = self::gerarKeystream($key, $iv, 'enc', strlen($text));
-        $ciphertext = self::somarBytes($text, $encKeystream);
+        $ciphertext = self::xorBytes($text, $encKeystream);
 
         $macKey = self::gerarKeystream($key, $iv, 'mac', self::TAM_BLOCO);
         $integridade = self::checksum($iv . $ciphertext, $macKey);
@@ -74,7 +74,7 @@ class Criptografia
         }
 
         $encKeystream = self::gerarKeystream($key, $iv, 'enc', strlen($ciphertext));
-        return self::subtrairBytes($ciphertext, $encKeystream);
+        return self::xorBytes($ciphertext, $encKeystream);
     }
 
     // ---------------------------------------------------------------
@@ -176,26 +176,6 @@ class Criptografia
             return $val & 0xFFFFFFFF;
         }
         return (($val << $n) | ($val >> (32 - $n))) & 0xFFFFFFFF;
-    }
-
-    private static function somarBytes(string $dados, string $keystream): string
-    {
-        $out = '';
-        $len = strlen($dados);
-        for ($i = 0; $i < $len; $i++) {
-            $out .= chr((ord($dados[$i]) + ord($keystream[$i])) % 256);
-        }
-        return $out;
-    }
-
-    private static function subtrairBytes(string $dados, string $keystream): string
-    {
-        $out = '';
-        $len = strlen($dados);
-        for ($i = 0; $i < $len; $i++) {
-            $out .= chr((ord($dados[$i]) - ord($keystream[$i]) + 256) % 256);
-        }
-        return $out;
     }
 
     private static function xorBytes(string $dados, string $keystream): string
