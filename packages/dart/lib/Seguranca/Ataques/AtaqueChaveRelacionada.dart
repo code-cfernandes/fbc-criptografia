@@ -16,14 +16,11 @@ class AtaqueChaveRelacionada extends Ataque {
   final double _limitePior;
 
   AtaqueChaveRelacionada({
-    int tamanhoBloco = 32,
-    int ivPorDelta = 3,
-    double limiteMedia = 0.45,
-    double limitePior = 0.3,
-  }) : _tamanhoBloco = tamanhoBloco,
-       _ivPorDelta = ivPorDelta,
-       _limiteMedia = limiteMedia,
-       _limitePior = limitePior;
+    this._tamanhoBloco = 32,
+    this._ivPorDelta = 3,
+    this._limiteMedia = 0.45,
+    this._limitePior = 0.3,
+  });
 
   @override
   String nome() => 'Chave relacionada (related-key)';

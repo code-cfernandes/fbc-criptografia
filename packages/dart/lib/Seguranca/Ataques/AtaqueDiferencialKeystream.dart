@@ -15,9 +15,7 @@ class AtaqueDiferencialKeystream extends Ataque {
   final int _amostras;
   final int _tamanhoBloco;
 
-  AtaqueDiferencialKeystream({int amostras = 2000, int tamanhoBloco = 32})
-    : _amostras = amostras,
-      _tamanhoBloco = tamanhoBloco;
+  AtaqueDiferencialKeystream({this._amostras = 2000, this._tamanhoBloco = 32});
 
   @override
   String nome() => 'Diferencial do keystream (delta fixo no IV)';

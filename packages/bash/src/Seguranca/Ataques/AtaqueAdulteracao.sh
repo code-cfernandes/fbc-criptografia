@@ -72,7 +72,8 @@ AtaqueAdulteracao() {
 
         local -a payload=()
         alvo_recompor payload "${integ[*]}" "${ct[*]}" "${iv[*]}"
-        local token_adulterado="$(alvo_prefixo)$(alvo_base64url_encode "${payload[*]}")"
+        local token_adulterado
+        token_adulterado="$(alvo_prefixo)$(alvo_base64url_encode "${payload[*]}")"
 
         local saida
         if saida=$(alvo_decrypt "$token_adulterado" 2>/dev/null); then

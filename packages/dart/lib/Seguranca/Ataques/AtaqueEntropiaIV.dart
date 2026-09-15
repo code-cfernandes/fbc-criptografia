@@ -20,7 +20,7 @@ import 'package:criptografia/Seguranca/SkipAtaqueException.dart';
 class AtaqueEntropiaIV extends Ataque {
   final int _amostras;
 
-  AtaqueEntropiaIV({int amostras = 2000}) : _amostras = amostras;
+  AtaqueEntropiaIV({this._amostras = 2000});
 
   @override
   String nome() => 'Entropia e previsibilidade do IV';

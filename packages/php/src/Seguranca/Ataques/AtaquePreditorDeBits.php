@@ -81,6 +81,7 @@ class AtaquePreditorDeBits implements AtaqueInterface
         );
     }
 
+    /** @param list<int> $bits */
     private function contexto(array $bits, int $i, int $k): int
     {
         $ctx = 0;
@@ -90,6 +91,7 @@ class AtaquePreditorDeBits implements AtaqueInterface
         return $ctx;
     }
 
+    /** @return list<int> */
     private function paraBits(string $bytes): array
     {
         $bits = [];

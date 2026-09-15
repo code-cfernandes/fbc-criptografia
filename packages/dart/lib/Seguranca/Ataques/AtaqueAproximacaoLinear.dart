@@ -14,12 +14,10 @@ class AtaqueAproximacaoLinear extends Ataque {
   final double _limiteBias;
 
   AtaqueAproximacaoLinear({
-    int amostras = 200,
-    int tamanhoBloco = 32,
-    double limiteBias = 0.3,
-  }) : _amostras = amostras,
-       _tamanhoBloco = tamanhoBloco,
-       _limiteBias = limiteBias;
+    this._amostras = 200,
+    this._tamanhoBloco = 32,
+    this._limiteBias = 0.3,
+  });
 
   @override
   String nome() => 'Aproximação linear (viés de Walsh)';

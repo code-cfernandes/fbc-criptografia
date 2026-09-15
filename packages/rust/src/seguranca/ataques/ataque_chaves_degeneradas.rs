@@ -31,7 +31,7 @@ impl Ataque for AtaqueChavesDegeneradas {
     }
 
     fn executar(&self, alvo: &dyn AlvoCriptografico) -> Result<ResultadoAtaque, ErroAtaque> {
-        let tam_chave = alvo.chave_de_teste().as_bytes().len();
+        let tam_chave = alvo.chave_de_teste().len();
         let iv_zero = vec![0u8; alvo.tamanho_iv()];
 
         let seq_crescente: Vec<u8> = (0..512).map(|i| (i % 256) as u8).collect();

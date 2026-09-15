@@ -36,7 +36,7 @@ impl Ataque for AtaqueAproximacaoLinear {
 
     fn executar(&self, alvo: &dyn AlvoCriptografico) -> Result<ResultadoAtaque, ErroAtaque> {
         let tam_iv = alvo.tamanho_iv();
-        let tam_chave = alvo.chave_de_teste().as_bytes().len();
+        let tam_chave = alvo.chave_de_teste().len();
         let bits_entrada = tam_iv * 8;
         let bits_saida = self.tamanho_bloco * 8;
 
@@ -64,12 +64,11 @@ impl Ataque for AtaqueAproximacaoLinear {
         let mut par: (i64, i64) = (-1, -1);
         for i in 0..bits_entrada {
             for j in 0..bits_saida {
-                let mut iguais = 0usize;
-                for s in 0..self.amostras {
-                    if entradas[s][i] == saidas[s][j] {
-                        iguais += 1;
-                    }
-                }
+                let iguais = entradas
+                    .iter()
+                    .zip(saidas.iter())
+                    .filter(|(entrada, saida)| entrada[i] == saida[j])
+                    .count();
                 let bias = (iguais as f64 / self.amostras as f64 - 0.5).abs();
                 if bias > maior_bias {
                     maior_bias = bias;

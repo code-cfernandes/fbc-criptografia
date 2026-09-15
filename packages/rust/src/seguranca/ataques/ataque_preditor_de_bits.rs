@@ -34,8 +34,8 @@ impl Default for AtaquePreditorDeBits {
 impl AtaquePreditorDeBits {
     fn contexto_de(bits: &[u8], i: usize, k: usize) -> usize {
         let mut ctx = 0usize;
-        for j in (i - k)..i {
-            ctx = (ctx << 1) | bits[j] as usize;
+        for &bit in bits.iter().take(i).skip(i - k) {
+            ctx = (ctx << 1) | bit as usize;
         }
         ctx
     }

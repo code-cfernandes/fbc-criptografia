@@ -1,11 +1,13 @@
 {
   "name": "@criptografia/rust",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Implementação da cifra FBC em Rust com a suíte de ataques.",
   "scripts": {
     "test": "cargo run --quiet",
     "fuzz": "cargo run --quiet --bin fuzz_cruzado --",
-    "regressao": "cargo run --quiet --bin regressao --"
+    "regressao": "cargo run --quiet --bin regressao --",
+    "lint": "cargo clippy --all-targets -- -D warnings",
+    "audit": "cargo audit"
   }
 }

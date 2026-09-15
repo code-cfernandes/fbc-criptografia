@@ -73,6 +73,7 @@ class AtaqueCorrelacaoPosicoes implements AtaqueInterface
         );
     }
 
+    /** @param list<string> $blocos */
     private function pearson(array $blocos, int $a, int $b): float
     {
         $n = count($blocos);

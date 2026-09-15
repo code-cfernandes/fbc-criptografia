@@ -1,7 +1,9 @@
 name: criptografia
 description: Implementação da cifra FBC em Dart com a suíte de ataques.
-version: 1.1.0
+version: 1.2.0
 publish_to: none
 
 environment:
   sdk: ^3.13.0
+dev_dependencies:
+  lints: ^6.1.0

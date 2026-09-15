@@ -25,8 +25,7 @@ import 'package:criptografia/Seguranca/SkipAtaqueException.dart';
 class AtaqueTiming extends Ataque {
   final int _repeticoesPorGrupo;
 
-  AtaqueTiming({int repeticoesPorGrupo = 400})
-    : _repeticoesPorGrupo = repeticoesPorGrupo;
+  AtaqueTiming({this._repeticoesPorGrupo = 400});
 
   @override
   String nome() => 'Timing da verificação de integridade';

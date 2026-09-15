@@ -14,10 +14,9 @@ class AtaqueDistribuicaoBytes extends Ataque {
   final int _tamanhoBloco;
 
   AtaqueDistribuicaoBytes({
-    int amostrasDeBlocos = 500,
-    int tamanhoBloco = 32,
-  }) : _amostrasDeBlocos = amostrasDeBlocos,
-       _tamanhoBloco = tamanhoBloco;
+    this._amostrasDeBlocos = 500,
+    this._tamanhoBloco = 32,
+  });
 
   @override
   String nome() => 'Distribuição de bytes (qui-quadrado)';

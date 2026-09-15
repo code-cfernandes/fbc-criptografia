@@ -31,7 +31,7 @@ impl Ataque for AtaqueBytesFixos {
 
         for i in 0..self.amostras {
             let letra = (b'A' + (i % 26) as u8) as char;
-            let sufixo: String = std::iter::repeat(letra).take(i % 10).collect();
+            let sufixo: String = std::iter::repeat_n(letra, i % 10).collect();
             let texto = format!("TEXTO_VARIADO_{}{}", i, sufixo);
             let token = alvo
                 .encrypt(texto.as_bytes())

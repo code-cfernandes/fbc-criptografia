@@ -15,9 +15,7 @@ class AtaqueAutocorrelacao extends Ataque {
   final int _tamanho;
   final int _tamanhoBloco;
 
-  AtaqueAutocorrelacao({int tamanho = 8192, int tamanhoBloco = 32})
-    : _tamanho = tamanho,
-      _tamanhoBloco = tamanhoBloco;
+  AtaqueAutocorrelacao({this._tamanho = 8192, this._tamanhoBloco = 32});
 
   @override
   String nome() => 'Autocorrelação e periodicidade do keystream';

@@ -133,6 +133,7 @@ class AtaqueBateriaEstatistica implements AtaqueInterface
         );
     }
 
+    /** @return list<int> */
     private function paraBits(string $bytes): array
     {
         $bits = [];

@@ -72,9 +72,9 @@ impl Ataque for AtaqueBIC {
                 let mut n10 = 0usize;
                 let mut n01 = 0usize;
                 let mut n00 = 0usize;
-                for s in 0..n {
-                    let fa = amostras_flips[s][a];
-                    let fb = amostras_flips[s][b];
+                for flips in &amostras_flips {
+                    let fa = flips[a];
+                    let fb = flips[b];
                     if fa == 1 && fb == 1 {
                         n11 += 1;
                     } else if fa == 1 && fb == 0 {

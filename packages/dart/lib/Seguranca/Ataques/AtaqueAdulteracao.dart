@@ -13,7 +13,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueAdulteracao extends Ataque {
   final int _tentativas;
 
-  AtaqueAdulteracao({int tentativas = 500}) : _tentativas = tentativas;
+  AtaqueAdulteracao({this._tentativas = 500});
 
   @override
   String nome() => 'Adulteração de bits (integridade)';
@@ -27,7 +27,7 @@ class AtaqueAdulteracao extends Ataque {
     final aceitosIndevidamente = <String>[];
 
     for (var t = 0; t < _tentativas; t++) {
-      final texto = 'MSG_$t' + repetir('X', randomInt(0, 50));
+      final texto = 'MSG_$t${repetir('X', randomInt(0, 50))}';
       final token = alvo.encrypt(texto);
       final decodificado = alvo.base64urlDecode(
         token.substring(alvo.prefixo().length),

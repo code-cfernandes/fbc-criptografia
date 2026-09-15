@@ -15,6 +15,7 @@ use Application\Seguranca\ResultadoAtaque;
  */
 class AtaqueMensagemLonga implements AtaqueInterface
 {
+    /** @param list<int> $tamanhos */
     public function __construct(private array $tamanhos = [1000, 10000, 100000])
     {
     }

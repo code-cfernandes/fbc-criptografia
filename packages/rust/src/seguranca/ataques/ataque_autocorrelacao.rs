@@ -43,8 +43,8 @@ impl AtaqueAutocorrelacao {
 
         let mut num = 0.0f64;
         let mut den = 0.0f64;
-        for i in 0..n {
-            den += (s[i] as f64 - media).powi(2);
+        for &v in s.iter() {
+            den += (v as f64 - media).powi(2);
         }
         for i in 0..(n - lag) {
             num += (s[i] as f64 - media) * (s[i + lag] as f64 - media);

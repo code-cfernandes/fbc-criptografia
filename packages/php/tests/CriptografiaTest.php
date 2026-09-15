@@ -8,6 +8,7 @@ use RuntimeException;
 /** Testes de ida e volta da criptografia FBC. */
 final class CriptografiaTest
 {
+    /** @param list<string> $iterations */
     public function run(array $iterations = []): void
     {
         if (empty($iterations)) {

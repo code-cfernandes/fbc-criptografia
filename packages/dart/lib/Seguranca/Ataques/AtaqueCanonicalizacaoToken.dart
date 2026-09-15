@@ -32,17 +32,17 @@ class AtaqueCanonicalizacaoToken extends Ataque {
     final variantes = <String, String>{};
     for (final p in [0, meio, corpo.length - 1]) {
       variantes['espaço na posição $p'] =
-          prefixo + corpo.substring(0, p) + ' ' + corpo.substring(p);
+          '$prefixo${corpo.substring(0, p)} ${corpo.substring(p)}';
       variantes['newline na posição $p'] =
-          prefixo + corpo.substring(0, p) + '\n' + corpo.substring(p);
+          '$prefixo${corpo.substring(0, p)}\n${corpo.substring(p)}';
       variantes['tab na posição $p'] =
-          prefixo + corpo.substring(0, p) + '\t' + corpo.substring(p);
+          '$prefixo${corpo.substring(0, p)}\t${corpo.substring(p)}';
     }
     variantes['alfabeto padrão (+/)'] =
         prefixo + corpo.replaceAll('-', '+').replaceAll('_', '/');
-    variantes['padding "=" extra'] = prefixo + corpo + '=';
+    variantes['padding "=" extra'] = '$prefixo$corpo=';
     variantes['caractere inválido no meio'] =
-        prefixo + corpo.substring(0, meio) + '!' + corpo.substring(meio);
+        '$prefixo${corpo.substring(0, meio)}!${corpo.substring(meio)}';
 
     final aceitas = <String>[];
     for (final entry in variantes.entries) {

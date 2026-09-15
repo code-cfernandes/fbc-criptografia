@@ -14,12 +14,10 @@ class AtaquePreditorDeBits extends Ataque {
   final double _limiteTaxa;
 
   AtaquePreditorDeBits({
-    int tamanho = 16384,
-    int contexto = 8,
-    double limiteTaxa = 0.55,
-  }) : _tamanho = tamanho,
-       _contexto = contexto,
-       _limiteTaxa = limiteTaxa;
+    this._tamanho = 16384,
+    this._contexto = 8,
+    this._limiteTaxa = 0.55,
+  });
 
   @override
   String nome() => 'Previsibilidade de bits (preditor por contexto)';

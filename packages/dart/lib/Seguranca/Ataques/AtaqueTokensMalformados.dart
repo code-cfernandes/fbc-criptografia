@@ -23,7 +23,7 @@ class AtaqueTokensMalformados extends Ataque {
       'vazio': '',
       'só prefixo': prefixo,
       'prefixo errado': 'XXX$corpo',
-      'base64 inválido': '${prefixo}!!!@@@###',
+      'base64 inválido': '$prefixo!!!@@@###',
       'bytes extras no fim': '${token}AAAA',
       'bytes extras no início': 'AAAA$token',
     };

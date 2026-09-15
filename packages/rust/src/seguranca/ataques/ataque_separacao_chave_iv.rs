@@ -40,7 +40,7 @@ impl Ataque for AtaqueSeparacaoChaveIV {
     }
 
     fn executar(&self, alvo: &dyn AlvoCriptografico) -> Result<ResultadoAtaque, ErroAtaque> {
-        let tam_chave = alvo.chave_de_teste().as_bytes().len();
+        let tam_chave = alvo.chave_de_teste().len();
         let tam_iv = alvo.tamanho_iv();
 
         let _primeiro = alvo.gerar_keystream_bruto(

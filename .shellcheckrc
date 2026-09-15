@@ -1,0 +1,33 @@
+# Configuração do ShellCheck para o monorepo (linter do pacote Bash).
+#
+# O ShellCheck procura este arquivo subindo a árvore a partir do diretório de
+# cada arquivo analisado, então ele vale para packages/bash/**, scripts/** etc.
+
+# Todos os scripts são Bash (namerefs, arrays, [[ ]], mapfile, ...). Vários
+# arquivos são "sourced" e não têm shebang; sem esta diretiva o ShellCheck não
+# sabe a shell alvo e emite SC2148 ("Tips depend on target shell") em cada um.
+shell=bash
+
+# Falsos positivos legítimos do estilo desta base:
+#
+# SC1090 / SC1091 - `source` com caminho dinâmico/calculado (ex.: carregar o
+#                   arquivo do ataque pelo nome). O ShellCheck não consegue
+#                   seguir o caminho e assume que o arquivo não existe.
+# SC2034          - variáveis globais da suíte de ataques (ATQ_*), saídas
+#                   preenchidas por nameref (local -n) e variáveis usadas
+#                   apenas para capturar o status de um comando. O uso acontece
+#                   em outro arquivo ou através de indireção, então o
+#                   ShellCheck não o enxerga.
+# SC2154          - variáveis declaradas via nameref e referenciadas
+#                   indiretamente (ex.: hex_para_decimais chave ...; usa
+#                   "${chave[*]}"), o ShellCheck não liga a declaração ao uso.
+# SC2178          - nameref (local -n) apontando para array: o ShellCheck
+#                   infere que o parâmetro é uma string e reclama do uso como
+#                   array.
+# SC2206          - word splitting intencional de arrays serializados como
+#                   string de decimais separados por espaço ("70 66 67 ..."),
+#                   que é o formato binário usado no projeto (bash não suporta
+#                   NUL em strings).
+# SC2046          - substituição de comando sem aspas cujo resultado é um único
+#                   token (ex.: `exit $(...)`); não há word splitting real.
+disable=SC1090,SC1091,SC2034,SC2154,SC2178,SC2206,SC2046

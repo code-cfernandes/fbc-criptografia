@@ -39,46 +39,50 @@ impl Ataque for AtaqueConfusaoCampos {
         let mut iv_rotacionado = iv.clone();
         iv_rotacionado.reverse();
 
-        let mut variantes: Vec<(&str, Vec<u8>)> = Vec::new();
-        variantes.push(("iv no início", [iv.clone(), integridade.clone(), ciphertext.clone()].concat()));
-        variantes.push((
-            "ciphertext antes da integridade",
-            [ciphertext.clone(), integridade.clone(), iv.clone()].concat(),
-        ));
-        variantes.push((
-            "iv duplicado no fim",
-            [integridade.clone(), ciphertext.clone(), iv.clone(), iv.clone()].concat(),
-        ));
-        variantes.push((
-            "integridade encurtada",
-            [integridade[1..].to_vec(), ciphertext.clone(), iv.clone()].concat(),
-        ));
-        variantes.push((
-            "byte extra no início",
-            [b"X".to_vec(), integridade.clone(), ciphertext.clone(), iv.clone()].concat(),
-        ));
-        variantes.push((
-            "byte extra entre integridade e ciphertext",
-            [integridade.clone(), b"X".to_vec(), ciphertext.clone(), iv.clone()].concat(),
-        ));
-        variantes.push((
-            "byte extra antes do iv",
-            [integridade.clone(), ciphertext.clone(), b"X".to_vec(), iv.clone()].concat(),
-        ));
-        variantes.push((
-            "iv rotacionado",
-            [integridade.clone(), ciphertext.clone(), iv_rotacionado].concat(),
-        ));
-        variantes.push((
-            "iv e último byte do ciphertext trocados",
-            [
-                integridade.clone(),
-                ciphertext[..ciphertext.len() - 1].to_vec(),
-                iv.clone(),
-                ciphertext[ciphertext.len() - 1..].to_vec(),
-            ]
-            .concat(),
-        ));
+        let variantes: Vec<(&str, Vec<u8>)> = vec![
+            (
+                "iv no início",
+                [iv.clone(), integridade.clone(), ciphertext.clone()].concat(),
+            ),
+            (
+                "ciphertext antes da integridade",
+                [ciphertext.clone(), integridade.clone(), iv.clone()].concat(),
+            ),
+            (
+                "iv duplicado no fim",
+                [integridade.clone(), ciphertext.clone(), iv.clone(), iv.clone()].concat(),
+            ),
+            (
+                "integridade encurtada",
+                [integridade[1..].to_vec(), ciphertext.clone(), iv.clone()].concat(),
+            ),
+            (
+                "byte extra no início",
+                [b"X".to_vec(), integridade.clone(), ciphertext.clone(), iv.clone()].concat(),
+            ),
+            (
+                "byte extra entre integridade e ciphertext",
+                [integridade.clone(), b"X".to_vec(), ciphertext.clone(), iv.clone()].concat(),
+            ),
+            (
+                "byte extra antes do iv",
+                [integridade.clone(), ciphertext.clone(), b"X".to_vec(), iv.clone()].concat(),
+            ),
+            (
+                "iv rotacionado",
+                [integridade.clone(), ciphertext.clone(), iv_rotacionado].concat(),
+            ),
+            (
+                "iv e último byte do ciphertext trocados",
+                [
+                    integridade.clone(),
+                    ciphertext[..ciphertext.len() - 1].to_vec(),
+                    iv.clone(),
+                    ciphertext[ciphertext.len() - 1..].to_vec(),
+                ]
+                .concat(),
+            ),
+        ];
 
         let mut aceitas: Vec<String> = Vec::new();
         for (nome, bruto) in &variantes {
@@ -87,7 +91,7 @@ impl Ataque for AtaqueConfusaoCampos {
                 aceitas.push(format!(
                     "{} -> aceito (retornou {} bytes)",
                     nome,
-                    r.as_bytes().len()
+                    r.len()
                 ));
             }
         }

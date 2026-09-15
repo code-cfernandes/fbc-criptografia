@@ -38,7 +38,7 @@ impl Ataque for AtaqueFoldEstrutural {
 
         let divisores: Vec<usize> = [2usize, 4, 8, 16]
             .into_iter()
-            .filter(|&d| self.tamanho_bloco % d == 0 && self.tamanho_bloco / d >= 1)
+            .filter(|&d| self.tamanho_bloco.is_multiple_of(d) && self.tamanho_bloco / d >= 1)
             .collect();
 
         let mut ocorrencias: Vec<(usize, usize)> =

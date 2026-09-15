@@ -32,11 +32,29 @@ pnpm typecheck:typescript # tsc --noEmit do pacote TS
 pnpm fuzz                 # fuzzing cruzado isolado
 pnpm regressao            # regressão histórica isolada
 pnpm fuzz:memoria         # fuzzing de memória (Go + Rust), 5 min
+pnpm lint                 # análise estática (linters + SAST + dependências)
 ```
 
 Ao adicionar um ataque novo, adicione também o caso correspondente ao harness de
 regressão histórica se ele corrige/previne um bug conhecido, e garanta que
 `pnpm fuzz` e `pnpm regressao` continuam verdes.
+
+### Análise estática
+
+Duas frentes, ambas no GitHub Actions (push/PR na `main`):
+
+- **CodeQL** (`.github/workflows/codeql.yml`): JS/TS, Python, Go e Java; os
+  resultados aparecem em **Security → Code scanning**. Se alterar o build de um
+  desses pacotes, ajuste o passo de build correspondente no workflow.
+- **Linters/SAST/dependências** (`.github/workflows/analise.yml`): ShellCheck
+  (Bash), Clippy + cargo-audit (Rust), PHPStan (PHP), dart analyze (Dart),
+  JET/Aqua (Julia), Semgrep, Gitleaks e OSV-Scanner. Roda localmente com
+  `pnpm lint` (relatório consolidado).
+
+Ao adicionar um ataque novo em uma linguagem coberta, garanta que `pnpm lint`
+continua verde (rode antes do commit). Se introduzir uma dependência, o
+`minimumReleaseAge` do pnpm pode bloquear versões muito recentes — nesse caso,
+aguarde ou adicione uma exceção justificada em `pnpm-workspace.yaml`.
 
 Cada suíte imprime um relatório e termina com código de saída `0` quando nenhum
 ataque encontra vulnerabilidade.

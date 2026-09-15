@@ -24,16 +24,12 @@ class AtaqueIntegral extends Ataque {
   final double _limiteZ;
 
   AtaqueIntegral({
-    int tamanhoBloco = 32,
-    int posicoesIv = 8,
-    int posicoesChave = 8,
-    int tentativas = 16,
-    double limiteZ = 5.0,
-  }) : _tamanhoBloco = tamanhoBloco,
-       _posicoesIv = posicoesIv,
-       _posicoesChave = posicoesChave,
-       _tentativas = tentativas,
-       _limiteZ = limiteZ;
+    this._tamanhoBloco = 32,
+    this._posicoesIv = 8,
+    this._posicoesChave = 8,
+    this._tentativas = 16,
+    this._limiteZ = 5.0,
+  });
 
   @override
   String nome() => 'Integral (soma balanceada variando 1 byte de IV/chave)';

@@ -55,7 +55,7 @@ impl Ataque for AtaqueTokensMalformados {
                 aceitos.push(format!(
                     "{} -> aceito (retornou {} bytes)",
                     nome,
-                    r.as_bytes().len()
+                    r.len()
                 ));
             }
         }

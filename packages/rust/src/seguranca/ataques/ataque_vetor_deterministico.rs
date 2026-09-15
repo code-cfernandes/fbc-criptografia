@@ -13,7 +13,7 @@ impl Ataque for AtaqueVetorDeterministico {
     }
 
     fn executar(&self, alvo: &dyn AlvoCriptografico) -> Result<ResultadoAtaque, ErroAtaque> {
-        let chave_fixa = "K".repeat(alvo.chave_de_teste().as_bytes().len());
+        let chave_fixa = "K".repeat(alvo.chave_de_teste().len());
         let iv_fixo = vec![0u8; alvo.tamanho_iv()];
 
         let ks1 = alvo.gerar_keystream_bruto(chave_fixa.as_bytes(), &iv_fixo, "enc", 32);

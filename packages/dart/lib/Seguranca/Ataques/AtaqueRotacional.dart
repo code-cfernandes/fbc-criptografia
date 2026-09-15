@@ -21,7 +21,7 @@ Uint8List _rotacionar(Uint8List buf, int k) {
 class AtaqueRotacional extends Ataque {
   final int _tamanho;
 
-  AtaqueRotacional({int tamanho = 64}) : _tamanho = tamanho;
+  AtaqueRotacional({this._tamanho = 64});
 
   @override
   String nome() => 'Rotacional/slide (simetria por rotação)';

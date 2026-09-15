@@ -138,7 +138,11 @@ class Criptografia
         return substr($saida, 0, $tamanho);
     }
 
-    /** Um passo da recorrência tipo-Fibonacci pra uma posição do bloco. */
+    /**
+     * Um passo da recorrência tipo-Fibonacci pra uma posição do bloco.
+     *
+     * @return array{0: int, 1: int}
+     */
     private static function passo(int $a, int $b, string $key, string $proposito, int $posFib, int $roundIdx): array
     {
         $n = self::rotacaoDoRound($roundIdx);

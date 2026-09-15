@@ -14,14 +14,11 @@ class AtaqueAvalanche extends Ataque {
   final double _limitePiorCaso;
 
   AtaqueAvalanche({
-    int amostras = 3000,
-    int tamanhoBloco = 32,
-    double limiteMedia = 0.45,
-    double limitePiorCaso = 0.3,
-  }) : _amostras = amostras,
-       _tamanhoBloco = tamanhoBloco,
-       _limiteMedia = limiteMedia,
-       _limitePiorCaso = limitePiorCaso;
+    this._amostras = 3000,
+    this._tamanhoBloco = 32,
+    this._limiteMedia = 0.45,
+    this._limitePiorCaso = 0.3,
+  });
 
   @override
   String nome() => 'Efeito avalanche';

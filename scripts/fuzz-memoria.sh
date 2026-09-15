@@ -10,6 +10,12 @@ cd "$(dirname "$0")/.." || exit 1
 
 segundos="${1:-300}"
 
+# Fixa a chave explicitamente - não depende do ambiente de quem chama o
+# script. Sem isso, se FBC_KEY não estiver exportada (ex: CI limpo), toda
+# entrada com prefixo "FBC" falha na checagem de chave antes de chegar em
+# base64/checksum/parsing, e o fuzzing inteiro testaria só esse early-return.
+export FBC_KEY='pfi5j8M17ZYHohQBdutGJ5UvxWcYv4Lf'
+
 echo "Fuzzing de memória por ${segundos}s (Go + Rust, em paralelo)..."
 
 ( cd packages/go && go test ./internal/core -run=^$ -fuzz=FuzzDecrypt -fuzztime="${segundos}s" ) \

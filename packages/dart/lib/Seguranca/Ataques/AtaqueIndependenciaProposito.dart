@@ -18,9 +18,7 @@ class AtaqueIndependenciaProposito extends Ataque {
   final int _amostras;
   final int _tamanho;
 
-  AtaqueIndependenciaProposito({int amostras = 2000, int tamanho = 32})
-    : _amostras = amostras,
-      _tamanho = tamanho;
+  AtaqueIndependenciaProposito({this._amostras = 2000, this._tamanho = 32});
 
   @override
   String nome() =>

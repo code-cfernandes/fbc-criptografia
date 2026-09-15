@@ -11,7 +11,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueBytesFixos extends Ataque {
   final int _amostras;
 
-  AtaqueBytesFixos({int amostras = 30}) : _amostras = amostras;
+  AtaqueBytesFixos({this._amostras = 30});
 
   @override
   String nome() => 'Bytes fixos entre tokens';
@@ -21,8 +21,7 @@ class AtaqueBytesFixos extends Ataque {
     final tokens = <String>[];
     for (var i = 0; i < _amostras; i++) {
       final texto =
-          'TEXTO_VARIADO_$i' +
-          repetir(String.fromCharCode(65 + (i % 26)), i % 10);
+          'TEXTO_VARIADO_$i${repetir(String.fromCharCode(65 + (i % 26)), i % 10)}';
       tokens.add(alvo.encrypt(texto).substring(alvo.prefixo().length));
     }
 

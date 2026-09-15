@@ -16,12 +16,10 @@ class AtaqueLinearidadeChecksum extends Ataque {
   final int _tamanhoEntrada;
 
   AtaqueLinearidadeChecksum({
-    int amostrasLinearidade = 5000,
-    int amostrasDiferencial = 500,
-    int tamanhoEntrada = 32,
-  }) : _amostrasLinearidade = amostrasLinearidade,
-       _amostrasDiferencial = amostrasDiferencial,
-       _tamanhoEntrada = tamanhoEntrada;
+    this._amostrasLinearidade = 5000,
+    this._amostrasDiferencial = 500,
+    this._tamanhoEntrada = 32,
+  });
 
   @override
   String nome() => 'Linearidade e diferenciais do checksum';

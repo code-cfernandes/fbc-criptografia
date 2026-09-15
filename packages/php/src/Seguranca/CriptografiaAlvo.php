@@ -12,6 +12,7 @@ use ReflectionClass;
  */
 class CriptografiaAlvo implements AlvoCriptografico
 {
+    /** @var ReflectionClass<Criptografia> */
     private ReflectionClass $reflexao;
 
     public function __construct(private string $chaveTeste = 'pfi5j8M17ZYHohQBdutGJ5UvxWcYv4Lf')
@@ -35,6 +36,7 @@ class CriptografiaAlvo implements AlvoCriptografico
         return 'FBC';
     }
 
+    /** @return array{integridade: string, ciphertext: string, iv: string} */
     public function decompor(string $tokenDecodificado): array
     {
         return [
@@ -44,6 +46,7 @@ class CriptografiaAlvo implements AlvoCriptografico
         ];
     }
 
+    /** @param array{integridade: string, ciphertext: string, iv: string} $campos */
     public function recompor(array $campos): string
     {
         return $campos['integridade'] . $campos['ciphertext'] . $campos['iv'];

@@ -12,8 +12,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueChavesDegeneradas extends Ataque {
   final int _tamanhoBloco;
 
-  AtaqueChavesDegeneradas({int tamanhoBloco = 32})
-    : _tamanhoBloco = tamanhoBloco;
+  AtaqueChavesDegeneradas({this._tamanhoBloco = 32});
 
   @override
   String nome() =>

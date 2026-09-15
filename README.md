@@ -12,7 +12,8 @@
 ![Julia](https://img.shields.io/badge/Julia-1.13+-9558B2?logo=julia&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)
 ![ataques](https://img.shields.io/badge/ataques-50%2F50-success)
-![versão](https://img.shields.io/badge/vers%C3%A3o-1.1.0-blue)
+![versão](https://img.shields.io/badge/vers%C3%A3o-1.2.0-blue)
+[![CodeQL](https://github.com/code-cfernandes/fbc-criptografia/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-cfernandes/fbc-criptografia/actions/workflows/codeql.yml)
 
 Monorepo educacional com a mesma cifra caseira ("FBC") implementada em dez
 pacotes — **PHP, Node.js, TypeScript, Python, Bash, Java, Go, Rust, Dart e
@@ -125,6 +126,7 @@ Para rodar cada frente isoladamente (ou o fuzzing de memória, que não entra no
 pnpm fuzz            # fuzzing cruzado: 1000 casos idênticos nas 10 linguagens
 pnpm regressao       # regressão histórica: a suíte ainda pega os 6 bugs já corrigidos
 pnpm fuzz:memoria    # fuzzing de memória (Go + Rust) por 5 min, sem crashes
+pnpm lint            # análise estática (linters + SAST + dependências)
 ```
 
 Ou individualmente:
@@ -370,6 +372,49 @@ arbitrários, por 5 minutos cada, esperando zero panics. O Rust roda sem
 sanitizer por não haver `gcc`/`clang` no ambiente. Aceita a duração em segundos:
 `pnpm fuzz:memoria 60`.
 
+## Análise estática
+
+Há duas frentes, ambas rodando no GitHub Actions em `push`/`pull_request` na
+`main`, e também localmente.
+
+### CodeQL — `.github/workflows/codeql.yml`
+
+SAST do GitHub; publica os resultados em **Security → Code scanning**. Cobre as
+linguagens suportadas pelo CodeQL:
+
+| Linguagem CodeQL | Pacotes | Build |
+| --- | --- | --- |
+| `javascript-typescript` | `packages/node`, `packages/typescript` | nenhum |
+| `python` | `packages/python` | nenhum |
+| `go` | `packages/go` | `go build ./...` |
+| `java-kotlin` | `packages/java` | `javac` |
+
+Configuração (exclusões e suíte `security-extended`) em
+`.github/codeql/codeql-config.yml`.
+
+### Linters, SAST e dependências — `pnpm lint`
+
+Cobre as linguagens que o CodeQL não atende (PHP, Rust, Dart, Julia e Bash) e
+adiciona SAST, segredos e auditoria de dependências. Roda via
+`.github/workflows/analise.yml` ou localmente com `pnpm lint`:
+
+| Checagem | Ferramenta | Cobre |
+| --- | --- | --- |
+| `bash (ShellCheck)` | ShellCheck | Bash |
+| `rust (Clippy)` | Clippy | Rust |
+| `rust (cargo-audit)` | cargo-audit | CVEs do `Cargo.lock` |
+| `php (PHPStan)` | PHPStan (nível 6) | PHP |
+| `php (composer audit)` | Composer | CVEs do `composer.lock` |
+| `dart (dart analyze)` | analyzer oficial | Dart |
+| `julia (JET + Aqua)` | JET.jl + Aqua.jl | Julia |
+| `SAST (Semgrep)` | Semgrep OSS (`p/default`) | multi-linguagem |
+| `segredos (Gitleaks)` | Gitleaks | segredos no git |
+| `deps (OSV-Scanner)` | OSV-Scanner | todos os lockfiles |
+
+O `pnpm lint` imprime um relatório consolidado (checagem, tempo e status) e sai
+com código `!= 0` se alguma checagem falhar. Cada pacote também expõe o seu
+linter isolado (`pnpm --filter @criptografia/<lang> run lint|analyse|audit`).
+
 ## Como escrever um novo ataque
 
 O contrato é o mesmo nas dez linguagens: um ataque expõe um nome e um método
@@ -407,6 +452,17 @@ em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Resultado atual
 
+Todas as frentes estão verdes na versão **1.2.0**:
+
+| Frente | Escopo | Resultado |
+| --- | --- | --- |
+| Suíte de ataques — `pnpm test` | 50 ataques × 10 linguagens | **500/500**, 0 vulnerabilidades |
+| Fuzzing cruzado — `pnpm fuzz` | 1000 casos × 10 linguagens | **1000/1000** idênticos |
+| Regressão histórica — `pnpm regressao` | 6 bugs × 10 linguagens + NUL (bash) | **60 detecções** + NUL |
+| Fuzzing de memória — `pnpm fuzz:memoria` | Go + Rust, 5 min cada | **0 crashes** (Go ~64M, Rust ~340M execuções) |
+| Análise estática — `pnpm lint` | 10 checagens (linters + SAST + deps) | **10/10** |
+| CodeQL — workflow | JS/TS, Python, Go, Java | roda no GitHub Actions |
+
 As dez implementações resistem aos 50 ataques. Como todas compartilham a mesma
 lógica byte a byte, o vetor de referência (chave `"K"` × 32, IV zero, propósito
 `enc`, 32 bytes) é idêntico em todas:
@@ -416,7 +472,8 @@ lógica byte a byte, o vetor de referência (chave `"K"` × 32, IV zero, propós
 ```
 
 A interoperabilidade é verificada explicitamente: tokens gerados por qualquer
-implementação decifram nas demais (ataque `AtaqueInteroperabilidade`).
+implementação decifram nas demais (ataque `AtaqueInteroperabilidade`), e o
+fuzzing cruzado confirma 1000 entradas idênticas nas 10 linguagens.
 
 ## Notas de implementação
 

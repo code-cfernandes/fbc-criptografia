@@ -1,0 +1,12 @@
+# PHPStan - linter estático do pacote PHP.
+#
+# Nível 6: exige tipos de valor em iteráveis (array/list) e genéricos, sem
+# cair no ruído do nível 7 (dezenas de avisos repetidos de int<1, max> em
+# random_bytes/str_split espalhados pelos ataques estatísticos).
+# O autoload PSR-4 (Application\ -> src/, Application\Tests\ -> tests/) é
+# descoberto automaticamente via vendor/autoload.php do composer.
+parameters:
+    level: 6
+    paths:
+        - src
+        - tests

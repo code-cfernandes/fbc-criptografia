@@ -11,7 +11,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueColisaoIV extends Ataque {
   final int _geracoes;
 
-  AtaqueColisaoIV({int geracoes = 5000}) : _geracoes = geracoes;
+  AtaqueColisaoIV({this._geracoes = 5000});
 
   @override
   String nome() => 'Colisão de IV';

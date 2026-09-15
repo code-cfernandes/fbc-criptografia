@@ -45,7 +45,7 @@ impl AtaqueEntropiaAproximada {
         let bits = Self::para_bits(bytes);
         let n = bits.len();
         let apen = Self::phi(&bits, self.m, n) - Self::phi(&bits, self.m + 1, n);
-        return 2.0 * n as f64 * (std::f64::consts::LN_2 - apen);
+        2.0 * n as f64 * (std::f64::consts::LN_2 - apen)
     }
 
     fn phi(bits: &[u8], m: usize, n: usize) -> f64 {

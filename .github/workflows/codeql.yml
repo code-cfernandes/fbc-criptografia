@@ -1,0 +1,85 @@
+name: CodeQL
+
+# Análise estática de segurança (SAST) com o CodeQL.
+#
+# O CodeQL cobre apenas algumas linguagens do monorepo:
+#   - javascript-typescript -> packages/node, packages/typescript
+#   - python                -> packages/python
+#   - go                    -> packages/go
+#   - java-kotlin           -> packages/java
+#
+# PHP, Rust, Dart, Julia e Bash NÃO são suportados pelo CodeQL e ficam de fora
+# (são cobertos pelos testes da suíte, fuzzing cruzado e regressão histórica).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '17 4 * * 1'
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: none
+          - language: python
+            build-mode: none
+          - language: go
+            build-mode: manual
+          - language: java-kotlin
+            build-mode: manual
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Go
+        if: matrix.language == 'go'
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: packages/go/go.mod
+          check-latest: true
+
+      - name: Setup Java
+        if: matrix.language == 'java-kotlin'
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Build (Go)
+        if: matrix.language == 'go'
+        run: |
+          cd packages/go
+          go build ./...
+
+      - name: Build (Java)
+        if: matrix.language == 'java-kotlin'
+        run: |
+          mkdir -p build
+          find packages/java/src -name '*.java' > sources.txt
+          javac -d build @sources.txt
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
+        with:
+          category: '/language:${{ matrix.language }}'

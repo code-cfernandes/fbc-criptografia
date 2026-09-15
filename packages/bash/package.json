@@ -1,11 +1,12 @@
 {
   "name": "@criptografia/bash",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Implementação da cifra FBC em Bash com a suíte de ataques.",
   "scripts": {
     "test": "bash bin/executar_testes.sh",
     "fuzz": "bash bin/fuzz_cruzado.sh",
-    "regressao": "bash tests/regressao_historica/regressao.sh"
+    "regressao": "bash tests/regressao_historica/regressao.sh",
+    "lint": "bash -O globstar -c 'shellcheck --severity=warning src/**/*.sh bin/*.sh tests/**/*.sh'"
   }
 }

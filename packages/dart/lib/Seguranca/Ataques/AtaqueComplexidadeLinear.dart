@@ -16,12 +16,10 @@ class AtaqueComplexidadeLinear extends Ataque {
   final double _limiteRelativo;
 
   AtaqueComplexidadeLinear({
-    int bitsPorAmostra = 1024,
-    int amostras = 5,
-    double limiteRelativo = 0.4,
-  }) : _bitsPorAmostra = bitsPorAmostra,
-       _amostras = amostras,
-       _limiteRelativo = limiteRelativo;
+    this._bitsPorAmostra = 1024,
+    this._amostras = 5,
+    this._limiteRelativo = 0.4,
+  });
 
   @override
   String nome() => 'Complexidade linear (Berlekamp-Massey)';

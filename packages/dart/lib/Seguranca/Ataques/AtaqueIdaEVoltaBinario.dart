@@ -17,8 +17,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueIdaEVoltaBinario extends Ataque {
   final int _tamanhoMaximo;
 
-  AtaqueIdaEVoltaBinario({int tamanhoMaximo = 256})
-    : _tamanhoMaximo = tamanhoMaximo;
+  AtaqueIdaEVoltaBinario({this._tamanhoMaximo = 256});
 
   @override
   String nome() => 'Ida-e-volta com dados binários (inclui NUL)';

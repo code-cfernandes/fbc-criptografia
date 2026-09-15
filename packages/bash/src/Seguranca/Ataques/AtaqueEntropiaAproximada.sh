@@ -129,7 +129,8 @@ AtaqueEntropiaAproximada() {
         vulneravel=1
     fi
 
-    local detalhes="chi2 keystream=$(util_fmt 1 "$mediaKeystream"), controle=$(util_fmt 1 "$mediaControle") (sd=$(util_fmt 1 "$desvioControle")), z=$(util_fmt 2 "$z") (limite=${limiteZ})"
+    local detalhes
+    detalhes="chi2 keystream=$(util_fmt 1 "$mediaKeystream"), controle=$(util_fmt 1 "$mediaControle") (sd=$(util_fmt 1 "$desvioControle")), z=$(util_fmt 2 "$z") (limite=${limiteZ})"
     if [ "$vulneravel" -eq 1 ]; then
         res_vulneravel "$detalhes" "media"
     else

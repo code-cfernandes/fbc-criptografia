@@ -14,12 +14,10 @@ class AtaqueSAC extends Ataque {
   final double _tolerancia;
 
   AtaqueSAC({
-    int tamanhoBloco = 32,
-    int amostras = 40,
-    double tolerancia = 0.05,
-  }) : _tamanhoBloco = tamanhoBloco,
-       _amostras = amostras,
-       _tolerancia = tolerancia;
+    this._tamanhoBloco = 32,
+    this._amostras = 40,
+    this._tolerancia = 0.05,
+  });
 
   @override
   String nome() => 'SAC (Strict Avalanche Criterion)';

@@ -1,2 +1,13 @@
 packages:
   - 'packages/*'
+
+# Hardening de supply chain (recomendado pelo Semgrep/pnpm).
+# - blockExoticSubdeps: impede dependências transitivas de fontes não confiáveis.
+# - minimumReleaseAge: espera 7 dias (10080 min) antes de instalar versões recém-publicadas.
+# - minimumReleaseAgeExclude: exceção para tipos dev (@types/node), que não vão a runtime.
+# - trustPolicy: impede downgrade de configurações de segurança.
+blockExoticSubdeps: true
+minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  - '@types/node'
+trustPolicy: no-downgrade

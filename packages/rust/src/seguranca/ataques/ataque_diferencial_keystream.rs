@@ -61,8 +61,7 @@ impl Ataque for AtaqueDiferencialKeystream {
             let d: Vec<u8> = ks1.iter().zip(ks2.iter()).map(|(a, b)| a ^ b).collect();
             deltas.insert(hex_encode(&d));
 
-            for p in 0..d.len() {
-                let byte = d[p];
+            for (p, &byte) in d.iter().enumerate() {
                 for b in 0..8 {
                     let idx = p * 8 + b;
                     if ((byte >> b) & 1) == 1 {

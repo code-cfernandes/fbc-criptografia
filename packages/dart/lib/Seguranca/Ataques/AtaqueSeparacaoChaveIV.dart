@@ -19,9 +19,7 @@ class AtaqueSeparacaoChaveIV extends Ataque {
   final int _tentativas;
   final int _tamanhoBloco;
 
-  AtaqueSeparacaoChaveIV({int tentativas = 50, int tamanhoBloco = 32})
-    : _tentativas = tentativas,
-      _tamanhoBloco = tamanhoBloco;
+  AtaqueSeparacaoChaveIV({this._tentativas = 50, this._tamanhoBloco = 32});
 
   @override
   String nome() => 'Separação chave/IV (invariância a key XOR iv)';

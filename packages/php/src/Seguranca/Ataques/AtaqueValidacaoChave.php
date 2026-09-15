@@ -15,6 +15,7 @@ use Application\Seguranca\ResultadoAtaque;
  */
 class AtaqueValidacaoChave implements AtaqueInterface
 {
+    /** @param list<int> $tamanhos */
     public function __construct(private array $tamanhos = [0, 1, 16, 31, 33, 64])
     {
     }

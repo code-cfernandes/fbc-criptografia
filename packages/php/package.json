@@ -1,12 +1,14 @@
 {
   "name": "@criptografia/php",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Implementação da cifra FBC em PHP com a suíte de ataques.",
   "scripts": {
     "test": "composer suite",
     "test:roundtrip": "composer test",
     "regressao": "php tests/regressao_historica/regressao.php",
-    "fuzz": "php bin/fuzz_cruzado.php"
+    "fuzz": "php bin/fuzz_cruzado.php",
+    "analyse": "vendor/bin/phpstan analyse --no-progress",
+    "audit": "composer audit"
   }
 }

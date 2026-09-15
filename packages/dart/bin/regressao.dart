@@ -251,7 +251,7 @@ class SnapshotAlvo extends CriptografiaAlvo {
     }
     final macKey = gerarKeystreamBruto(key, iv, 'mac', 32);
     final integridade = checksumBruto(_concatenar([iv, ct]), macKey);
-    return 'FBC' + core.base64urlEncode(_concatenar([integridade, ct, iv]));
+    return 'FBC${core.base64urlEncode(_concatenar([integridade, ct, iv]))}';
   }
 
   @override

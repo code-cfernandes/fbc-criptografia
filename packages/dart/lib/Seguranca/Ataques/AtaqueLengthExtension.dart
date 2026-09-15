@@ -12,8 +12,8 @@ class AtaqueLengthExtension extends Ataque {
   final String _mensagem;
 
   AtaqueLengthExtension({
-    String mensagem = 'texto para o ataque de length extension',
-  }) : _mensagem = mensagem;
+    this._mensagem = 'texto para o ataque de length extension',
+  });
 
   @override
   String nome() => 'Length extension / truncamento de token';
@@ -26,12 +26,12 @@ class AtaqueLengthExtension extends Ataque {
     final meio = corpo.length ~/ 2;
 
     final variantes = <String, String>{
-      'append A': '${prefixo}$corpo' 'A',
-      'append =': '${prefixo}$corpo' '=',
+      'append A': '$prefixo$corpo' 'A',
+      'append =': '$prefixo$corpo' '=',
       'truncar 1 char': prefixo + corpo.substring(0, corpo.length - 1),
       'truncar 2 chars': prefixo + corpo.substring(0, corpo.length - 2),
       'inserir ! no meio':
-          prefixo + corpo.substring(0, meio) + '!' + corpo.substring(meio),
+          '$prefixo${corpo.substring(0, meio)}!${corpo.substring(meio)}',
       'prefixo extra': '${prefixo}A$corpo',
     };
 

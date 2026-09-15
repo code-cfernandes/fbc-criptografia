@@ -6,5 +6,5 @@
     "fuzz": "bash bin/fuzz_cruzado.sh",
     "regressao": "bash bin/regressao.sh"
   },
-  "version": "1.1.0"
+  "version": "1.2.0"
 }

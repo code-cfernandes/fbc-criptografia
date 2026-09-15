@@ -25,11 +25,15 @@ interface AlvoCriptografico
      * Decompõe um token (já sem prefixo e já base64url-decodificado) nos
      * campos que o compõem. Formato esperado das chaves: 'integridade',
      * 'ciphertext', 'iv' - cada uma como string binária.
+     *
+     * @return array{integridade: string, ciphertext: string, iv: string}
      */
     public function decompor(string $token): array;
 
     /**
      * Recompõe um token a partir dos campos (inverso de decompor()).
+     *
+     * @param array{integridade: string, ciphertext: string, iv: string} $campos
      */
     public function recompor(array $campos): string;
 

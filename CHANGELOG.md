@@ -5,6 +5,23 @@ Todas as mudanças relevantes deste projeto são documentadas neste arquivo.
 O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 o versionamento segue o [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.2.0] - 2026-09-15
+
+### Adicionado
+
+- **Análise estática com CodeQL** (`.github/workflows/codeql.yml`): workflow do
+  GitHub Actions que roda em push/PR na `main` e semanalmente, cobrindo
+  JavaScript/TypeScript, Python, Go e Java (as linguagens suportadas pelo
+  CodeQL). Configuração em `.github/codeql/codeql-config.yml`, com suíte
+  `security-extended` e exclusões de dependências/artefatos.
+- **Linters, SAST e dependências** (`.github/workflows/analise.yml` e
+  `pnpm lint`): ShellCheck (Bash), Clippy + cargo-audit (Rust), PHPStan (PHP,
+  nível 6), dart analyze (Dart), JET.jl + Aqua.jl (Julia), Semgrep OSS,
+  Gitleaks e OSV-Scanner. O `pnpm lint` imprime um relatório consolidado.
+- **Hardening de supply chain no pnpm** (`pnpm-workspace.yaml`):
+  `blockExoticSubdeps`, `minimumReleaseAge` (7 dias) e `trustPolicy`.
+- **`lint`/`analyse`/`audit` por pacote** para rodar cada ferramenta isolada.
+
 ## [1.1.0] - 2026-09-15
 
 ### Adicionado

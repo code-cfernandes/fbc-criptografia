@@ -1,0 +1,16 @@
+name: FBC CodeQL config
+
+# Não analisa dependências, artefatos de build nem a pasta gerada do fuzzing.
+paths-ignore:
+  - '**/vendor/**'
+  - '**/node_modules/**'
+  - '**/build/**'
+  - '**/target/**'
+  - '**/.dart_tool/**'
+  - '**/__pycache__/**'
+  - 'fuzz/**'
+  - 'packages/rust/fuzz/**'
+
+# Suíte padrão de segurança + consultas estendidas de segurança.
+queries:
+  - uses: security-extended

@@ -14,7 +14,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueChaveErrada extends Ataque {
   final int _tentativas;
 
-  AtaqueChaveErrada({int tentativas = 30}) : _tentativas = tentativas;
+  AtaqueChaveErrada({this._tentativas = 30});
 
   @override
   String nome() => 'Rejeição de chave incorreta';

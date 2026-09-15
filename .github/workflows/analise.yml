@@ -1,0 +1,73 @@
+name: Análise estática
+
+# Roda os linters/analisadores das linguagens que o CodeQL não cobre (ou cobre
+# parcialmente) + SAST, segredos e auditoria de dependências:
+#   ShellCheck (Bash), Clippy + cargo-audit (Rust), PHPStan (PHP),
+#   dart analyze (Dart), JET/Aqua (Julia), Semgrep, Gitleaks e OSV-Scanner.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: analise-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analise-estatica:
+    name: Linters, SAST e dependências
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1
+
+      - name: Setup Julia
+        uses: julia-actions/setup-julia@4c0cb0fce8556fdb04a90347310e5db8b1f98fb9 # v2
+        with:
+          version: '1'
+
+      - name: Instalar ferramentas
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          rustup component add clippy
+          cargo install cargo-audit --locked
+          python3 -m pip install --user --break-system-packages semgrep
+          curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz | tar -xz gitleaks
+          sudo mv gitleaks /usr/local/bin/
+          curl -fsSL -o osv-scanner https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_linux_amd64
+          sudo mv osv-scanner /usr/local/bin/
+          sudo chmod +x /usr/local/bin/osv-scanner
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Instalar dependências
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+          composer install --working-dir=packages/php --no-interaction --no-progress
+          (cd packages/dart && dart pub get)
+          julia --startup-file=no -e 'using Pkg; Pkg.add(["JET", "Aqua"])'
+
+      - name: Análise estática
+        run: pnpm lint

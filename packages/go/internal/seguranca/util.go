@@ -2,12 +2,16 @@ package seguranca
 
 import (
 	crand "crypto/rand"
-	"math/rand"
+	"encoding/binary"
 )
 
 // RandomInt devolve um inteiro aleatório em [min, max], inclusivo.
 func RandomInt(min, max int) int {
-	return min + rand.Intn(max-min+1)
+	var b [8]byte
+	if _, err := crand.Read(b[:]); err != nil {
+		panic(err)
+	}
+	return min + int(binary.BigEndian.Uint64(b[:])%uint64(max-min+1))
 }
 
 // RandomBytes devolve n bytes aleatórios.

@@ -16,9 +16,7 @@ class AtaqueBateriaEstatistica extends Ataque {
   final int _tamanho;
   final double _zLimite;
 
-  AtaqueBateriaEstatistica({int tamanho = 16384, double zLimite = 4.0})
-    : _tamanho = tamanho,
-      _zLimite = zLimite;
+  AtaqueBateriaEstatistica({this._tamanho = 16384, this._zLimite = 4.0});
 
   @override
   String nome() => 'Bateria estatística de bits (monobit/runs/blocos)';

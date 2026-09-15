@@ -16,10 +16,9 @@ class AtaqueCoberturaDependencia extends Ataque {
   final int _perturbacoesPorPar;
 
   AtaqueCoberturaDependencia({
-    int tamanhoBloco = 32,
-    int perturbacoesPorPar = 5,
-  }) : _tamanhoBloco = tamanhoBloco,
-       _perturbacoesPorPar = perturbacoesPorPar;
+    this._tamanhoBloco = 32,
+    this._perturbacoesPorPar = 5,
+  });
 
   @override
   String nome() => 'Cobertura de dependência (matriz entrada x saída)';

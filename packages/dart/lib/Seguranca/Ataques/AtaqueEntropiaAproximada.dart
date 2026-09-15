@@ -22,16 +22,12 @@ class AtaqueEntropiaAproximada extends Ataque {
   final double _limiteZ;
 
   AtaqueEntropiaAproximada({
-    int tamanho = 4096,
-    int m = 8,
-    int controles = 12,
-    int amostrasKeystream = 3,
-    double limiteZ = 5.0,
-  }) : _tamanho = tamanho,
-       _m = m,
-       _controles = controles,
-       _amostrasKeystream = amostrasKeystream,
-       _limiteZ = limiteZ;
+    this._tamanho = 4096,
+    this._m = 8,
+    this._controles = 12,
+    this._amostrasKeystream = 3,
+    this._limiteZ = 5.0,
+  });
 
   @override
   String nome() => 'Entropia aproximada (ApEn vs controle aleatório)';

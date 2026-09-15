@@ -64,6 +64,7 @@ class AtaqueComplexidadeLinear implements AtaqueInterface
         );
     }
 
+    /** @return list<int> */
     private function paraBits(string $bytes, int $limite): array
     {
         $bits = [];
@@ -76,7 +77,11 @@ class AtaqueComplexidadeLinear implements AtaqueInterface
         return array_slice($bits, 0, $limite);
     }
 
-    /** Algoritmo de Berlekamp-Massey sobre GF(2). */
+    /**
+     * Algoritmo de Berlekamp-Massey sobre GF(2).
+     *
+     * @param list<int> $s
+     */
     private function berlekampMassey(array $s): int
     {
         $n = count($s);

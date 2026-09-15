@@ -1,0 +1,20 @@
+# Configuração do `dart analyze` para o pacote Dart do monorepo.
+#
+# Base: package:lints/recommended.yaml. O código é um porte byte a byte das
+# demais linguagens (PHP, Node, TypeScript, ...), então os dois lints abaixo
+# são desativados de forma consciente para preservar a paridade de nomes entre
+# as implementações. Os demais avisos foram corrigidos de fato.
+include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    # Os arquivos usam PascalCase (Criptografia.dart, AtaqueSAC.dart, ...),
+    # espelhando o nome da classe e o layout das outras linguagens. Renomear
+    # quebraria a correspondência 1:1 com os arquivos de referência e todos os
+    # imports, sem ganho real (o lint é puramente estilístico).
+    file_names: false
+
+    # Constantes em SCREAMING_CASE (TAM_BLOCO, DIGITOS_PI, CHAVE_FIXA, ...)
+    # também vêm do porte: nas outras linguagens são `const`/`define` no mesmo
+    # estilo e a nomenclatura é referenciada nos comentários cruzados.
+    constant_identifier_names: false

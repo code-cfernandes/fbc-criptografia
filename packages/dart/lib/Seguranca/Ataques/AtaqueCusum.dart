@@ -13,9 +13,7 @@ class AtaqueCusum extends Ataque {
   final int _tamanho;
   final double _limiteZ;
 
-  AtaqueCusum({int tamanho = 8192, double limiteZ = 4.0})
-    : _tamanho = tamanho,
-      _limiteZ = limiteZ;
+  AtaqueCusum({this._tamanho = 8192, this._limiteZ = 4.0});
 
   @override
   String nome() => 'Somas cumulativas (cusum)';

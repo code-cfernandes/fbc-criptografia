@@ -13,10 +13,9 @@ class AtaqueDistribuicaoPorPosicao extends Ataque {
   final int _tamanhoBloco;
 
   AtaqueDistribuicaoPorPosicao({
-    int amostrasDeBlocos = 2000,
-    int tamanhoBloco = 32,
-  }) : _amostrasDeBlocos = amostrasDeBlocos,
-       _tamanhoBloco = tamanhoBloco;
+    this._amostrasDeBlocos = 2000,
+    this._tamanhoBloco = 32,
+  });
 
   @override
   String nome() => 'Distribuição de bytes por posição do bloco';

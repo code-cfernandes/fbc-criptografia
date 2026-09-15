@@ -10,7 +10,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueIdaEVolta extends Ataque {
   final int _tamanhoMaximo;
 
-  AtaqueIdaEVolta({int tamanhoMaximo = 130}) : _tamanhoMaximo = tamanhoMaximo;
+  AtaqueIdaEVolta({this._tamanhoMaximo = 130});
 
   @override
   String nome() => 'Ida-e-volta (round trip)';

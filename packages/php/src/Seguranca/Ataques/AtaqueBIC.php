@@ -73,9 +73,9 @@ class AtaqueBIC implements AtaqueInterface
                     $fb = $amostrasFlips[$s][$b];
                     if ($fa === 1 && $fb === 1) {
                         $n11++;
-                    } elseif ($fa === 1 && $fb === 0) {
+                    } elseif ($fa === 1) {
                         $n10++;
-                    } elseif ($fa === 0 && $fb === 1) {
+                    } elseif ($fb === 1) {
                         $n01++;
                     } else {
                         $n00++;

@@ -17,12 +17,10 @@ class AtaqueBIC extends Ataque {
   final double _limite;
 
   AtaqueBIC({
-    int tamanhoBloco = 32,
-    int amostras = 300,
-    double limite = 0.35,
-  }) : _tamanhoBloco = tamanhoBloco,
-       _amostras = amostras,
-       _limite = limite;
+    this._tamanhoBloco = 32,
+    this._amostras = 300,
+    this._limite = 0.35,
+  });
 
   @override
   String nome() => 'BIC (Bit Independence Criterion)';

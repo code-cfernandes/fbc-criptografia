@@ -47,7 +47,7 @@ class AtaqueTiming implements AtaqueInterface
         $campos = $alvo->decompor($decodificado);
         $tamanhoIntegridade = strlen($campos['integridade']);
 
-        $medirGrupo = function (int $posicaoErro) use ($alvo, $campos, $tamanhoIntegridade) {
+        $medirGrupo = function (int $posicaoErro) use ($alvo, $campos) {
             $tempos = [];
             for ($r = 0; $r < $this->repeticoesPorGrupo; $r++) {
                 $camposAdulterados = $campos;

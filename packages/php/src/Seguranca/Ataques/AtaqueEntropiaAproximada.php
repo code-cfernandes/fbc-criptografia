@@ -87,6 +87,7 @@ class AtaqueEntropiaAproximada implements AtaqueInterface
         return 2 * $n * (log(2) - $apen);
     }
 
+    /** @param list<int> $bits */
     private function phi(array $bits, int $m, int $n): float
     {
         $total = 1 << $m;
@@ -112,6 +113,7 @@ class AtaqueEntropiaAproximada implements AtaqueInterface
         return $soma;
     }
 
+    /** @return list<int> */
     private function paraBits(string $bytes): array
     {
         $bits = [];

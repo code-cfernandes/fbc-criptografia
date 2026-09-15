@@ -20,14 +20,11 @@ class AtaqueAvalancheChecksum extends Ataque {
   final double _limitePiorCaso;
 
   AtaqueAvalancheChecksum({
-    int mensagensPorCombinacao = 10,
-    int tamanhoEntrada = 32,
-    double limiteMedia = 0.4,
-    double limitePiorCaso = 0.4,
-  }) : _mensagensPorCombinacao = mensagensPorCombinacao,
-       _tamanhoEntrada = tamanhoEntrada,
-       _limiteMedia = limiteMedia,
-       _limitePiorCaso = limitePiorCaso;
+    this._mensagensPorCombinacao = 10,
+    this._tamanhoEntrada = 32,
+    this._limiteMedia = 0.4,
+    this._limitePiorCaso = 0.4,
+  });
 
   @override
   String nome() => 'Efeito avalanche do checksum/MAC';

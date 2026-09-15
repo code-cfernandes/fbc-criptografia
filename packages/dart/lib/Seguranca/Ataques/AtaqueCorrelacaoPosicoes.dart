@@ -16,12 +16,10 @@ class AtaqueCorrelacaoPosicoes extends Ataque {
   final double _limiteCorrelacao;
 
   AtaqueCorrelacaoPosicoes({
-    int amostras = 3000,
-    int tamanhoBloco = 32,
-    double limiteCorrelacao = 0.15,
-  }) : _amostras = amostras,
-       _tamanhoBloco = tamanhoBloco,
-       _limiteCorrelacao = limiteCorrelacao;
+    this._amostras = 3000,
+    this._tamanhoBloco = 32,
+    this._limiteCorrelacao = 0.15,
+  });
 
   @override
   String nome() => 'Correlação entre posições do bloco';

@@ -238,7 +238,7 @@ pub fn base64url_decode(data: &str) -> Result<Vec<u8>, CriptoError> {
 
 pub fn get_key() -> Result<Vec<u8>, CriptoError> {
     let key = std::env::var("FBC_KEY").unwrap_or_default();
-    if key.as_bytes().len() != 32 {
+    if key.len() != 32 {
         return Err(CriptoError::new("Chave deve ter 32 bytes."));
     }
     Ok(key.into_bytes())

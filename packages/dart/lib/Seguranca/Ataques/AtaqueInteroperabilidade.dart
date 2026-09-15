@@ -23,7 +23,7 @@ class _VetorKeystream {
   const _VetorKeystream(this.iv, this.proposito, this.tamanho, this.esperado);
 }
 
-const List<_VetorKeystream> VETORES = [
+const List<_VetorKeystream> _VETORES = [
   _VetorKeystream(
     '00000000000000000000000000000000',
     'enc',
@@ -84,7 +84,7 @@ class _VetorToken {
   const _VetorToken(this.texto, this.token);
 }
 
-const List<_VetorToken> TOKENS = [
+const List<_VetorToken> _TOKENS = [
   _VetorToken(
     '',
     'FBCbBmERldK0rQ3SAu1PxJ7drr2ie-jwhDLefEaGiBsJ_2autyPG4oSs6DXEM_w6-6x',
@@ -112,7 +112,7 @@ class AtaqueInteroperabilidade extends Ataque {
   ResultadoAtaque executar(AlvoCriptografico alvo) {
     final falhas = <String>[];
 
-    for (final v in VETORES) {
+    for (final v in _VETORES) {
       final ks = alvo.gerarKeystreamBruto(
         CHAVE_FIXA,
         hexToBytes(v.iv),
@@ -124,7 +124,7 @@ class AtaqueInteroperabilidade extends Ataque {
       }
     }
 
-    for (final t in TOKENS) {
+    for (final t in _TOKENS) {
       try {
         if (alvo.decrypt(t.token) != t.texto) {
           falhas.add('token não decifrou para "${t.texto}"');
@@ -149,7 +149,7 @@ class AtaqueInteroperabilidade extends Ataque {
       nome(),
       false,
       Severidade.info,
-      '${VETORES.length} vetores de keystream e ${TOKENS.length} tokens de '
+      '${_VETORES.length} vetores de keystream e ${_TOKENS.length} tokens de '
           'referência conferem',
     );
   }

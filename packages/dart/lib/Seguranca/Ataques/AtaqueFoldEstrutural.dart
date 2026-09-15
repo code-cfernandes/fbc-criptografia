@@ -13,9 +13,7 @@ class AtaqueFoldEstrutural extends Ataque {
   final int _amostras;
   final int _tamanhoBloco;
 
-  AtaqueFoldEstrutural({int amostras = 5000, int tamanhoBloco = 32})
-    : _amostras = amostras,
-      _tamanhoBloco = tamanhoBloco;
+  AtaqueFoldEstrutural({this._amostras = 5000, this._tamanhoBloco = 32});
 
   @override
   String nome() =>
@@ -83,10 +81,9 @@ class AtaqueFoldEstrutural extends Ataque {
       nome(),
       false,
       Severidade.info,
-      'Nenhuma repetição estrutural acima do ruído esperado: ' +
-          jsonEncode({
+      'Nenhuma repetição estrutural acima do ruído esperado: ${jsonEncode({
             for (final d in divisores) '$d': ocorrencias[d],
-          }),
+          })}',
     );
   }
 }

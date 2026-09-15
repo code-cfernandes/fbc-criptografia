@@ -13,9 +13,7 @@ class AtaqueChavesFracas extends Ataque {
   final int _tamanho;
   final double _toleranciaBits;
 
-  AtaqueChavesFracas({int tamanho = 2048, double toleranciaBits = 0.05})
-    : _tamanho = tamanho,
-      _toleranciaBits = toleranciaBits;
+  AtaqueChavesFracas({this._tamanho = 2048, this._toleranciaBits = 0.05});
 
   @override
   String nome() => 'Chaves fracas (busca dirigida)';

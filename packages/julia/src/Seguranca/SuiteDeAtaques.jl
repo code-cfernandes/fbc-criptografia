@@ -1,6 +1,7 @@
 """Orquestra a execução de uma coleção de ataques contra um alvo."""
 mutable struct SuiteDeAtaques
     ataques::Vector{Ataque}
+    SuiteDeAtaques(ataques::Vector{Ataque}) = new(ataques)
 end
 
 SuiteDeAtaques() = SuiteDeAtaques(Ataque[])

@@ -36,7 +36,7 @@ impl Ataque for AtaqueChavesFracas {
     }
 
     fn executar(&self, alvo: &dyn AlvoCriptografico) -> Result<ResultadoAtaque, ErroAtaque> {
-        let len = alvo.chave_de_teste().as_bytes().len();
+        let len = alvo.chave_de_teste().len();
         let casos: Vec<(&str, Vec<u8>)> = vec![
             ("zeros", vec![0x00u8; len]),
             ("0xFF", vec![0xffu8; len]),

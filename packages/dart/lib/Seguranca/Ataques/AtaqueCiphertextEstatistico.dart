@@ -14,12 +14,10 @@ class AtaqueCiphertextEstatistico extends Ataque {
   final double _zLimite;
 
   AtaqueCiphertextEstatistico({
-    int amostras = 200,
-    int tamanhoTexto = 64,
-    double zLimite = 4,
-  }) : _amostras = amostras,
-       _tamanhoTexto = tamanhoTexto,
-       _zLimite = zLimite;
+    this._amostras = 200,
+    this._tamanhoTexto = 64,
+    this._zLimite = 4,
+  });
 
   @override
   String nome() => 'Estatística do ciphertext (chi²/runs/autocorrelação)';

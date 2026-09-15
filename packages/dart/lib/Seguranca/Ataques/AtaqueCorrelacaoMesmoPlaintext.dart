@@ -20,10 +20,9 @@ class AtaqueCorrelacaoMesmoPlaintext extends Ataque {
   final String _textoFixo;
 
   AtaqueCorrelacaoMesmoPlaintext({
-    int amostras = 300,
-    String textoFixo = 'MENSAGEM_SEMPRE_IGUAL_PARA_TESTAR',
-  }) : _amostras = amostras,
-       _textoFixo = textoFixo;
+    this._amostras = 300,
+    this._textoFixo = 'MENSAGEM_SEMPRE_IGUAL_PARA_TESTAR',
+  });
 
   @override
   String nome() =>

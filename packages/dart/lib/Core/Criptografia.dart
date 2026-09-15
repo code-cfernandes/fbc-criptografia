@@ -288,7 +288,7 @@ String encrypt(Object texto) {
   final macKey = gerarKeystream(key, iv, 'mac', TAM_BLOCO);
   final integridade = checksum(_concatenar([iv, ciphertext]), macKey);
 
-  return 'FBC' + base64urlEncode(_concatenar([integridade, ciphertext, iv]));
+  return 'FBC${base64urlEncode(_concatenar([integridade, ciphertext, iv]))}';
 }
 
 String decrypt(String text) {

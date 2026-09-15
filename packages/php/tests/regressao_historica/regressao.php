@@ -158,7 +158,11 @@ class SnapshotAlvo extends CriptografiaAlvo
         return substr($saida, 0, $tamanho);
     }
 
-    /** passo com mutação: bug 5 remove a reinserção da chave em cada rodada. */
+    /**
+     * passo com mutação: bug 5 remove a reinserção da chave em cada rodada.
+     *
+     * @return array{0: int, 1: int}
+     */
     private function passoComBug(int $a, int $b, string $key, string $proposito, int $posFib, int $roundIdx): array
     {
         $n = self::rotacaoDoRound($roundIdx);

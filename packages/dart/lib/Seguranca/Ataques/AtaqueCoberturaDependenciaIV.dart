@@ -13,10 +13,9 @@ class AtaqueCoberturaDependenciaIV extends Ataque {
   final int _perturbacoesPorPosicao;
 
   AtaqueCoberturaDependenciaIV({
-    int tamanhoBloco = 32,
-    int perturbacoesPorPosicao = 5,
-  }) : _tamanhoBloco = tamanhoBloco,
-       _perturbacoesPorPosicao = perturbacoesPorPosicao;
+    this._tamanhoBloco = 32,
+    this._perturbacoesPorPosicao = 5,
+  });
 
   @override
   String nome() => 'Cobertura de dependência do IV (entrada x saída)';

@@ -10,8 +10,7 @@ import 'package:criptografia/Seguranca/ResultadoAtaque.dart';
 class AtaqueMac extends Ataque {
   final String _mensagem;
 
-  AtaqueMac({String mensagem = 'mensagem para o ataque de MAC'})
-    : _mensagem = mensagem;
+  AtaqueMac({this._mensagem = 'mensagem para o ataque de MAC'});
 
   @override
   String nome() => 'Força bruta e truncamento do MAC';

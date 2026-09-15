@@ -53,9 +53,9 @@ impl Ataque for AtaqueDistribuicaoPorPosicao {
         let mut problemas: Vec<String> = Vec::new();
         let mut pior = 0.0f64;
 
-        for p in 0..contagens.len() {
+        for (p, contagem) in contagens.iter().enumerate() {
             let mut chi2 = 0.0f64;
-            for &v in &contagens[p] {
+            for &v in contagem {
                 chi2 += (v as f64 - esperado).powi(2) / esperado;
             }
             pior = pior.max(chi2);

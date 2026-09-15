@@ -16,8 +16,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueMensagemLonga extends Ataque {
   final List<int> _tamanhos;
 
-  AtaqueMensagemLonga({List<int> tamanhos = const [1000, 10000, 100000]})
-    : _tamanhos = tamanhos;
+  AtaqueMensagemLonga({this._tamanhos = const [1000, 10000, 100000]});
 
   @override
   String nome() => 'Mensagens longas (multi-bloco)';

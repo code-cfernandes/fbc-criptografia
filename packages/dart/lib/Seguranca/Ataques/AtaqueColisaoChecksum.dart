@@ -25,7 +25,7 @@ import 'package:criptografia/Seguranca/Util.dart';
 class AtaqueColisaoChecksum extends Ataque {
   final int _amostras;
 
-  AtaqueColisaoChecksum({int amostras = 200000}) : _amostras = amostras;
+  AtaqueColisaoChecksum({this._amostras = 200000});
 
   @override
   String nome() => 'Colisão no checksum (paradoxo do aniversário)';

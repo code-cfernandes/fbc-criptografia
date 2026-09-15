@@ -76,8 +76,8 @@ impl Ataque for AtaqueSAC {
         let mut pior = -1i64;
         let mut pior_desvio = 0.0f64;
         let mut pior_p = 0.5f64;
-        for j in 0..total_bits {
-            let p = flips[j] as f64 / total as f64;
+        for (j, &f) in flips.iter().enumerate() {
+            let p = f as f64 / total as f64;
             let desvio = (p - 0.5).abs();
             if desvio > pior_desvio {
                 pior_desvio = desvio;

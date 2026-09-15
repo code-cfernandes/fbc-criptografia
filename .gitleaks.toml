@@ -1,0 +1,23 @@
+title = "FBC gitleaks config"
+
+# Usa as regras padrão do gitleaks e adiciona uma allowlist para os vetores de
+# teste do projeto (chave de teste e tokens KAT), que NÃO são segredos.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Vetores de teste e arquivos locais"
+
+# A chave de teste padrão e os tokens FBC dos vetores KAT.
+regexes = [
+  '''pfi5j8M17ZYHohQBdutGJ5UvxWcYv4Lf''',
+  '''FBC[A-Za-z0-9_\-]{16,}''',
+]
+
+# Dependências e artefatos não são analisados.
+paths = [
+  '''packages/php/bin/\.env''',
+  '''(^|/)fuzz/''',
+  '''(^|/)vendor/''',
+  '''(^|/)node_modules/''',
+]

@@ -10,6 +10,7 @@ namespace Application\Seguranca;
  */
 final class ResultadoAtaque
 {
+    /** @param array<string, mixed>|null $dados */
     public function __construct(
         public readonly string $nomeAtaque,
         public readonly bool $vulneravel,

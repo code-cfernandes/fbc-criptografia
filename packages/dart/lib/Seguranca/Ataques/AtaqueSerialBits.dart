@@ -13,9 +13,7 @@ class AtaqueSerialBits extends Ataque {
   final int _tamanho;
   final List<int> _ordens;
 
-  AtaqueSerialBits({int tamanho = 4096, List<int> ordens = const [2, 3, 4]})
-    : _tamanho = tamanho,
-      _ordens = ordens;
+  AtaqueSerialBits({this._tamanho = 4096, this._ordens = const [2, 3, 4]});
 
   @override
   String nome() => 'Teste serial (padrões de bits sobrepostos)';

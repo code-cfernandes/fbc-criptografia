@@ -15,6 +15,7 @@ use Application\Seguranca\SkipAtaqueException;
  */
 class AtaqueSerialBits implements AtaqueInterface
 {
+    /** @param list<int> $ordens */
     public function __construct(private int $tamanho = 4096, private array $ordens = [2, 3, 4])
     {
     }
@@ -79,6 +80,7 @@ class AtaqueSerialBits implements AtaqueInterface
         );
     }
 
+    /** @return list<int> */
     private function paraBits(string $bytes): array
     {
         $bits = [];
