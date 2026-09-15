@@ -21,9 +21,110 @@ Julia** — e uma suíte com **50 ataques criptográficos** que roda contra cada
 implementação. Todas as dez linguagens estão em paridade: **50/50 ataques** e o
 mesmo vetor de referência byte a byte.
 
-> **Aviso:** é uma cifra caseira, feita para estudo e para exercitar o raciocínio
-> de criptoanálise. Ela **não** foi revisada e **não** deve ser usada em produção.
-> Para qualquer uso real, use bibliotecas consagradas (libsodium, AES-GCM, etc.).
+## ⚠️ Aviso de segurança — leia antes de usar
+
+Este projeto é um **estudo de criptografia e criptoanálise aplicada**, não uma
+proposta de cifra pronta para uso real. A cifra ("FBC") foi desenhada, atacada
+e corrigida ao longo de dezenas de iterações — mas por uma pessoa (com apoio de
+IA), ao longo de semanas. AES e ChaCha20 têm décadas de escrutínio público,
+competições formais e milhares de criptoanalistas profissionais tentando
+quebrá-los. Essa diferença de escala não se compensa com mais testes
+automatizados.
+
+**"Passa em 50 ataques, 10 linguagens, fuzzing e SAST" não significa "é
+segura"** — significa "resiste a todas as categorias de ataque que alguém
+pensou em escrever até agora". Cada vulnerabilidade real encontrada neste
+projeto (ver [CHANGELOG.md](CHANGELOG.md)) só apareceu porque, em algum
+momento, alguém pensou em testar exatamente aquilo — prefixo fixo, keystream
+vazando conteúdo, colapso de metades do bloco por simetria algébrica, avalanche
+fraca no MAC, ataque integral, separação frágil entre chave e IV, token
+smuggling via base64 não-canônico. A mais recente nem passou pelos 50 ataques
+automatizados: foi uma ambiguidade algébrica de 256 soluções na etapa de
+difusão, achada só analisando a fórmula no papel — consequência de `32`
+(tamanho do bloco) ser múltiplo de `8` (ordem da rotação usada), independente
+de qual distância de mistura fosse escolhida.
+
+Isso não é motivo de vergonha — é a demonstração prática de por que nenhuma
+suíte de testes, por maior que seja, esgota o espaço de ataques possíveis.
+"Não achamos mais bugs" e "não existem mais bugs" são afirmações diferentes, e
+só a suíte nunca prova a segunda.
+
+**Não use esta cifra para:**
+
+- Proteger dados sensíveis (senhas, dados pessoais, informações financeiras)
+- Qualquer sistema em produção, mesmo interno ou de baixo risco aparente
+- Qualquer coisa cuja violação tenha custo real para alguém
+
+**Para uso real**, as mesmas ideias exploradas aqui (IV aleatório, difusão,
+autenticação) já existem implementadas, revisadas e testadas há décadas:
+
+| Linguagem | Opção recomendada |
+| --- | --- |
+| PHP | `sodium_crypto_secretbox` (libsodium) ou `openssl_encrypt('aes-256-gcm', ...)` |
+| Node.js / TypeScript | `node:crypto` (`createCipheriv('aes-256-gcm', ...)`) ou `libsodium-wrappers` |
+| Python | `cryptography` (`AESGCM`) ou `PyNaCl` |
+| Go | `crypto/cipher` (AES-GCM) da biblioteca padrão |
+| Rust | crate `aes-gcm` ou `chacha20poly1305` |
+| Java | `javax.crypto.Cipher` com `AES/GCM/NoPadding` |
+| Dart | pacote `cryptography` |
+| Julia | `Nettle.jl` ou bindings de libsodium |
+
+Este projeto existe para responder "por que essas bibliotecas são desenhadas do
+jeito que são" — não para substituí-las.
+
+## Vulnerabilidade conhecida, não corrigida
+
+Diferente de todas as outras encontradas neste projeto (listadas no
+[CHANGELOG.md](CHANGELOG.md), todas corrigidas e cobertas pela
+[regressão histórica](#regressão-histórica--pnpm-regressao)), esta ficou
+registrada e **deliberadamente sem correção aplicada**. Documentar por que é
+mais importante, pro objetivo deste projeto, do que corrigir.
+
+### O achado
+
+A etapa de difusão combina posições do bloco assim:
+
+```
+misturado[pos] = rotEsquerda8(novoB[pos], 1) XOR novoB[(pos + distância) % 32]
+```
+
+Rotação de 1 bit num byte tem **ordem exatamente 8** (rotacionar 8 vezes volta
+ao valor original). O bloco tem **32 posições** — múltiplo exato de 8. Ao
+percorrer o ciclo completo de mistura (as distâncias são coprimas com 32, então
+formam um único ciclo de 32 posições), o efeito acumulado da rotação é sempre
+identidade, **para qualquer uma das 5 distâncias usadas**. Isso faz a etapa de
+mistura, isolada, ter uma família de **256 soluções válidas** (não uma única)
+para o estado anterior à mistura, dado o estado observado depois — comprovado
+computacionalmente para as 5 distâncias (`3, 5, 11, 19, 41`).
+
+Foi encontrado analisando a fórmula (álgebra linear sobre GF(2)), não rodando
+nenhum dos 50 ataques automatizados — é uma categoria de fraqueza que testes
+comportamentais/estatísticos estruturalmente não conseguem enxergar.
+
+### Por que não foi corrigido
+
+Uma correção parcial existe e foi verificada: variar a quantidade de rotação
+por posição (em vez de usar sempre `1`) reduz a ambiguidade local de 256 para
+2-4 candidatos, dependendo do esquema exato escolhido. O que **não foi
+verificado** é se essa redução local realmente se traduz em segurança prática
+depois de encadear as 10 rodadas de difusão com o `passo()` não-linear (soma,
+XOR com a chave, multiplicação) — fechar essa conta exigiria resolver um
+sistema de restrições bem maior (equivalente a uma criptoanálise algébrica
+completa, tipo SAT-solving ou bases de Gröbner sobre o sistema), o que está
+fora do escopo de um estudo iterativo.
+
+Aplicar a mitigação parcial sem provar o efeito real daria uma falsa sensação
+de "corrigido" — pior do que deixar documentado como está. Por isso a decisão
+foi registrar o achado, a direção da correção, e o limite exato do que foi (e
+não foi) verificado, em vez de fechar a issue prematuramente.
+
+### O que isso significa na prática
+
+Não sabemos se essa fraqueza permite recuperar a chave mais rápido que força
+bruta (2²⁵⁶) — não foi provado nem descartado. É exatamente esse tipo de
+incerteza, sobre uma cifra com meses de escrutínio, que separa um projeto de
+estudo de uma biblioteca pronta para produção (ver
+[aviso de segurança](#-aviso-de-segurança--leia-antes-de-usar)).
 
 ## Formato do token
 
