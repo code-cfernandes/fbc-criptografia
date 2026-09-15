@@ -104,11 +104,17 @@ Instale o workspace:
 pnpm install
 ```
 
-Rode a suíte em todas as linguagens (continua mesmo se uma falhar):
+Rode a suíte em todas as linguagens. O `pnpm test` executa cada pacote e
+imprime um **relatório consolidado** no final (continua mesmo se uma falhar):
 
 ```bash
-pnpm test
+pnpm test                # relatório consolidado
+pnpm test --detalhado    # inclui a saída completa de cada linguagem
+pnpm test:bruto          # pnpm -r --no-bail test (saída crua de cada pacote)
 ```
+
+O relatório consolidado mostra, por linguagem, o número de ataques, as
+vulnerabilidades encontradas, o tempo e o status, com um total no fim.
 
 Ou individualmente:
 

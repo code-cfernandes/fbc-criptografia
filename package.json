@@ -8,7 +8,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "pnpm -r --no-bail test",
+    "test": "node scripts/testar-tudo.mjs",
+    "test:bruto": "pnpm -r --no-bail test",
     "test:php": "time pnpm --filter @criptografia/php test",
     "test:node": "time pnpm --filter @criptografia/node test",
     "test:python": "time pnpm --filter @criptografia/python test",

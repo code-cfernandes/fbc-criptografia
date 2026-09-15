@@ -23,10 +23,12 @@ objetivo é manter todas **compatíveis byte a byte** e a suíte **verde**.
 
 ```bash
 pnpm install
-pnpm test            # todas as linguagens (continua mesmo se uma falhar)
-pnpm test:php        # ou test:node / test:typescript / test:python / test:bash
-pnpm test:java       # ou test:go / test:rust / test:dart / test:julia
-pnpm typecheck:typescript   # tsc --noEmit do pacote TS
+pnpm test                 # relatório consolidado de todas as linguagens
+pnpm test --detalhado     # inclui a saída completa de cada linguagem
+pnpm test:bruto           # saída crua (pnpm -r --no-bail test)
+pnpm test:php             # ou test:node / test:typescript / test:python / test:bash
+pnpm test:java            # ou test:go / test:rust / test:dart / test:julia
+pnpm typecheck:typescript # tsc --noEmit do pacote TS
 ```
 
 Cada suíte imprime um relatório e termina com código de saída `0` quando nenhum
