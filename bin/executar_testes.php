@@ -39,6 +39,11 @@ use Application\Core\Seguranca\Ataques\AtaqueIdaEVoltaBinario;
 use Application\Core\Seguranca\Ataques\AtaqueConfusaoCampos;
 use Application\Core\Seguranca\Ataques\AtaqueLinearidadeChecksum;
 use Application\Core\Seguranca\Ataques\AtaqueValidacaoChave;
+use Application\Core\Seguranca\Ataques\AtaqueIntegral;
+use Application\Core\Seguranca\Ataques\AtaqueDiferencialKeystream;
+use Application\Core\Seguranca\Ataques\AtaqueDistribuicaoPorPosicao;
+use Application\Core\Seguranca\Ataques\AtaqueCorrelacaoPosicoes;
+use Application\Core\Seguranca\Ataques\AtaquePreditorDeBits;
 
 $alvo = new CriptografiaAlvo();
 
@@ -78,7 +83,12 @@ $suite
     ->adicionar(new AtaqueIdaEVoltaBinario())
     ->adicionar(new AtaqueConfusaoCampos())
     ->adicionar(new AtaqueLinearidadeChecksum())
-    ->adicionar(new AtaqueValidacaoChave());
+    ->adicionar(new AtaqueValidacaoChave())
+    ->adicionar(new AtaqueIntegral())
+    ->adicionar(new AtaqueDiferencialKeystream())
+    ->adicionar(new AtaqueDistribuicaoPorPosicao())
+    ->adicionar(new AtaqueCorrelacaoPosicoes())
+    ->adicionar(new AtaquePreditorDeBits());
 
 $passou = $suite->rodarEImprimir($alvo);
 
