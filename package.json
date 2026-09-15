@@ -1,6 +1,6 @@
 {
   "name": "criptografia",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Monorepo com as implementações da cifra FBC em várias linguagens e a suíte de ataques.",
   "packageManager": "pnpm@11.14.0",
@@ -10,6 +10,9 @@
   "scripts": {
     "test": "node scripts/testar-tudo.mjs",
     "test:bruto": "pnpm -r --no-bail test",
+    "fuzz": "node scripts/fuzz-cruzado.mjs",
+    "regressao": "node scripts/regressao-historica.mjs",
+    "fuzz:memoria": "bash scripts/fuzz-memoria.sh",
     "test:php": "time pnpm --filter @criptografia/php test",
     "test:node": "time pnpm --filter @criptografia/node test",
     "test:python": "time pnpm --filter @criptografia/python test",

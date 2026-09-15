@@ -1,9 +1,11 @@
 {
   "name": "@criptografia/python",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Implementação da cifra FBC em Python com a suíte de ataques.",
   "scripts": {
-    "test": "python3 bin/executar_testes.py"
+    "test": "python3 bin/executar_testes.py",
+    "fuzz": "python3 bin/fuzz_cruzado.py",
+    "regressao": "python3 tests/regressao_historica/regressao.py"
   }
 }

@@ -1,12 +1,25 @@
 [package]
 name = "criptografia-rust"
-version = "0.0.0"
+version = "1.1.0"
 edition = "2021"
 description = "Implementação da cifra FBC em Rust com a suíte de ataques."
 publish = false
+default-run = "criptografia-rust"
+
+[lib]
+name = "criptografia_rust"
+path = "src/lib.rs"
 
 [[bin]]
 name = "criptografia-rust"
 path = "src/main.rs"
+
+[[bin]]
+name = "fuzz_cruzado"
+path = "src/bin/fuzz_cruzado.rs"
+
+[[bin]]
+name = "regressao"
+path = "src/bin/regressao.rs"
 
 [dependencies]

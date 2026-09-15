@@ -1,9 +1,11 @@
 {
   "name": "@criptografia/julia",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Implementação da cifra FBC em Julia com a suíte de ataques.",
   "scripts": {
-    "test": "julia --startup-file=no bin/executar_testes.jl"
+    "test": "julia --startup-file=no bin/executar_testes.jl",
+    "fuzz": "julia --startup-file=no bin/fuzz_cruzado.jl",
+    "regressao": "julia --startup-file=no bin/regressao.jl"
   }
 }

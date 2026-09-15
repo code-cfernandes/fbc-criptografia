@@ -3,15 +3,24 @@ const CHAVE_PADRAO = "pfi5j8M17ZYHohQBdutGJ5UvxWcYv4Lf"
 """
 Liga a suíte de ataques à implementação real da cifra, expondo as camadas
 internas de keystream e checksum.
+
+`CriptografiaAlvo` é abstrato para que o harness de regressão histórica possa
+definir um `SnapshotAlvo` (subtipo) que herda esta infra e sobrescreve apenas
+os métodos com bug. O tipo concreto usado pela suíte é `CriptografiaAlvoReal`.
 """
-mutable struct CriptografiaAlvo <: AlvoCriptografico
+abstract type CriptografiaAlvo <: AlvoCriptografico end
+
+mutable struct CriptografiaAlvoReal <: CriptografiaAlvo
     chave_teste::String
 
-    function CriptografiaAlvo(chave_teste::AbstractString = CHAVE_PADRAO)
+    function CriptografiaAlvoReal(chave_teste::AbstractString = CHAVE_PADRAO)
         ENV["FBC_KEY"] = chave_teste
         return new(String(chave_teste))
     end
 end
+
+CriptografiaAlvo(chave_teste::AbstractString = CHAVE_PADRAO) =
+    CriptografiaAlvoReal(chave_teste)
 
 encrypt(alvo::CriptografiaAlvo, texto::AbstractString) = encrypt(texto)
 decrypt(alvo::CriptografiaAlvo, token::AbstractString) = decrypt(token)

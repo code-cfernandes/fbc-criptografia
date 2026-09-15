@@ -23,13 +23,20 @@ objetivo é manter todas **compatíveis byte a byte** e a suíte **verde**.
 
 ```bash
 pnpm install
-pnpm test                 # relatório consolidado de todas as linguagens
-pnpm test --detalhado     # inclui a saída completa de cada linguagem
-pnpm test:bruto           # saída crua (pnpm -r --no-bail test)
+pnpm test                 # tudo: ataques + fuzz cruzado + regressão (consolidado)
+pnpm test --detalhado     # inclui a saída completa de cada frente
+pnpm test:bruto           # saída crua só da suíte de ataques (pnpm -r --no-bail test)
 pnpm test:php             # ou test:node / test:typescript / test:python / test:bash
 pnpm test:java            # ou test:go / test:rust / test:dart / test:julia
 pnpm typecheck:typescript # tsc --noEmit do pacote TS
+pnpm fuzz                 # fuzzing cruzado isolado
+pnpm regressao            # regressão histórica isolada
+pnpm fuzz:memoria         # fuzzing de memória (Go + Rust), 5 min
 ```
+
+Ao adicionar um ataque novo, adicione também o caso correspondente ao harness de
+regressão histórica se ele corrige/previne um bug conhecido, e garanta que
+`pnpm fuzz` e `pnpm regressao` continuam verdes.
 
 Cada suíte imprime um relatório e termina com código de saída `0` quando nenhum
 ataque encontra vulnerabilidade.

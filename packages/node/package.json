@@ -1,10 +1,12 @@
 {
   "name": "@criptografia/node",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Implementação da cifra FBC em Node.js com a suíte de ataques.",
   "main": "src/Core/Criptografia.js",
   "scripts": {
-    "test": "node bin/executar_testes.js"
+    "test": "node bin/executar_testes.js",
+    "fuzz": "node bin/fuzz_cruzado.js",
+    "regressao": "node tests/regressao_historica/regressao.js"
   }
 }

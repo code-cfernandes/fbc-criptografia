@@ -1,9 +1,11 @@
 {
   "name": "@criptografia/dart",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Implementação da cifra FBC em Dart com a suíte de ataques.",
   "scripts": {
-    "test": "dart run bin/executar_testes.dart"
+    "test": "dart run bin/executar_testes.dart",
+    "fuzz": "dart run bin/fuzz_cruzado.dart",
+    "regressao": "dart run bin/regressao.dart"
   }
 }

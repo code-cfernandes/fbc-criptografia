@@ -40,8 +40,14 @@ function listarArquivos() {
     const pkg = join(raiz, 'packages', dir, 'package.json');
     if (existsSync(pkg)) arquivos.push(pkg);
   }
-  const composer = join(raiz, 'packages', 'php', 'composer.json');
-  if (existsSync(composer)) arquivos.push(composer);
+  for (const extra of [
+    'packages/php/composer.json',
+    'packages/rust/Cargo.toml',
+    'packages/dart/pubspec.yaml',
+  ]) {
+    const caminho = join(raiz, extra);
+    if (existsSync(caminho)) arquivos.push(caminho);
+  }
   return arquivos;
 }
 
@@ -50,10 +56,18 @@ const atual = raizPkg.version;
 const nova = proximaVersao(atual, tipo);
 
 for (const arquivo of listarArquivos()) {
-  const json = JSON.parse(readFileSync(arquivo, 'utf8'));
-  json.version = nova;
-  const indent = arquivo.endsWith('composer.json') ? 4 : 2;
-  writeFileSync(arquivo, JSON.stringify(json, null, indent) + '\n');
+  if (arquivo.endsWith('package.json') || arquivo.endsWith('composer.json')) {
+    const json = JSON.parse(readFileSync(arquivo, 'utf8'));
+    json.version = nova;
+    const indent = arquivo.endsWith('composer.json') ? 4 : 2;
+    writeFileSync(arquivo, JSON.stringify(json, null, indent) + '\n');
+  } else if (arquivo.endsWith('Cargo.toml')) {
+    const conteudo = readFileSync(arquivo, 'utf8');
+    writeFileSync(arquivo, conteudo.replace(/^version = "[^"]+"/m, `version = "${nova}"`));
+  } else if (arquivo.endsWith('pubspec.yaml')) {
+    const conteudo = readFileSync(arquivo, 'utf8');
+    writeFileSync(arquivo, conteudo.replace(/^version: .*$/m, `version: ${nova}`));
+  }
   console.log(`  atualizado ${arquivo.replace(raiz + '/', '')} -> ${nova}`);
 }
 

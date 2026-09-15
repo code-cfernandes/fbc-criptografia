@@ -1,9 +1,11 @@
 {
   "name": "@criptografia/go",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Implementação da cifra FBC em Go com a suíte de ataques.",
   "scripts": {
-    "test": "go run ./cmd/executar"
+    "test": "go run ./cmd/executar",
+    "fuzz": "go run ./cmd/fuzz_cruzado",
+    "regressao": "go run ./cmd/regressao"
   }
 }

@@ -7,3 +7,4 @@ build/
 target/
 .dart_tool/
 *.class
+/fuzz/

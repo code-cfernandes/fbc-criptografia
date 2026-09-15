@@ -5,6 +5,31 @@ Todas as mudanças relevantes deste projeto são documentadas neste arquivo.
 O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e
 o versionamento segue o [SemVer](https://semver.org/lang/pt-BR/).
 
+## [1.1.0] - 2026-09-15
+
+### Adicionado
+
+- **Fuzzing cruzado** (`pnpm fuzz`): 1000 casos determinísticos de
+  chave/IV/propósito/plaintext (incluindo tamanhos de borda, chaves/IVs
+  degenerados e bytes `0x00`); cada linguagem calcula keystream + checksum e as
+  10 saídas são comparadas linha a linha.
+- **Harness de regressão histórica** (`pnpm regressao`): para cada bug real já
+  corrigido, um snapshot reintroduz a falha e o ataque pareado precisa acusá-la,
+  enquanto o código atual precisa resistir. Cobre 6 bugs e, no bash, a
+  preservação de NUL.
+- **Fuzzing de memória** (`pnpm fuzz:memoria`): `go test -fuzz` e `cargo fuzz`
+  no decodificador de token com bytes arbitrários, por 5 minutos cada.
+
+### Alterado
+
+- `pnpm test` agora roda as três frentes (suíte de ataques + fuzzing cruzado +
+  regressão histórica) e imprime um único relatório consolidado.
+- Script de versionamento SemVer agora também atualiza `Cargo.toml` (Rust) e
+  `pubspec.yaml` (Dart).
+- Rust passou a expor uma `lib` (além dos binários), necessária para o
+  `cargo fuzz`; Julia usa `CriptografiaAlvo` como tipo abstrato para permitir os
+  snapshots de regressão.
+
 ## [1.0.0] - 2026-09-15
 
 Primeira versão estável da suíte completa.

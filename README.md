@@ -12,7 +12,7 @@
 ![Julia](https://img.shields.io/badge/Julia-1.13+-9558B2?logo=julia&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)
 ![ataques](https://img.shields.io/badge/ataques-50%2F50-success)
-![versão](https://img.shields.io/badge/vers%C3%A3o-1.0.0-blue)
+![versão](https://img.shields.io/badge/vers%C3%A3o-1.1.0-blue)
 
 Monorepo educacional com a mesma cifra caseira ("FBC") implementada em dez
 pacotes — **PHP, Node.js, TypeScript, Python, Bash, Java, Go, Rust, Dart e
@@ -104,17 +104,28 @@ Instale o workspace:
 pnpm install
 ```
 
-Rode a suíte em todas as linguagens. O `pnpm test` executa cada pacote e
-imprime um **relatório consolidado** no final (continua mesmo se uma falhar):
+Rode todas as frentes de teste. O `pnpm test` executa, para cada linguagem, a
+suíte de 50 ataques, depois o fuzzing cruzado e a regressão histórica, e imprime
+um **relatório consolidado** no final (continua mesmo se uma frente falhar):
 
 ```bash
-pnpm test                # relatório consolidado
-pnpm test --detalhado    # inclui a saída completa de cada linguagem
-pnpm test:bruto          # pnpm -r --no-bail test (saída crua de cada pacote)
+pnpm test                # tudo: ataques + fuzz cruzado + regressão
+pnpm test --detalhado    # inclui a saída completa de cada frente
+pnpm test:bruto          # pnpm -r --no-bail test (saída crua só da suíte de ataques)
 ```
 
-O relatório consolidado mostra, por linguagem, o número de ataques, as
-vulnerabilidades encontradas, o tempo e o status, com um total no fim.
+O relatório consolidado traz a tabela por linguagem (ataques, vulnerabilidades,
+tempo, status) e uma linha de resumo para o fuzzing cruzado e para a regressão,
+com um **RESUMO GERAL** no fim.
+
+Para rodar cada frente isoladamente (ou o fuzzing de memória, que não entra no
+`pnpm test`):
+
+```bash
+pnpm fuzz            # fuzzing cruzado: 1000 casos idênticos nas 10 linguagens
+pnpm regressao       # regressão histórica: a suíte ainda pega os 6 bugs já corrigidos
+pnpm fuzz:memoria    # fuzzing de memória (Go + Rust) por 5 min, sem crashes
+```
 
 Ou individualmente:
 
@@ -322,6 +333,42 @@ Os 50 ataques:
 48. Estatística do ciphertext (chi²/runs/autocorrelação)
 49. Força bruta e truncamento do MAC
 50. Length extension / truncamento de token
+
+## Frentes de teste
+
+O `pnpm test` roda as três primeiras frentes e consolida tudo num único
+relatório; o fuzzing de memória (`pnpm fuzz:memoria`) é separado porque leva
+~5 min por linguagem.
+
+### Suíte de ataques — `pnpm test`
+
+50 ataques por linguagem, com relatório consolidado (ataques, vulnerabilidades,
+tempo e status).
+
+### Fuzzing cruzado — `pnpm fuzz`
+
+Gera 1000 casos determinísticos (`fuzz/casos.txt`, no formato
+`chave_hex|iv_hex|proposito|plaintext_hex`), roda o runner de cada linguagem
+calculando keystream + checksum e compara as 10 saídas linha a linha. Cobre
+tamanhos de borda (0, 1, 31, 32, 33, 63, 64, 65, 1000 bytes), chaves/IVs
+degenerados e bytes `0x00` no meio do plaintext. `pnpm fuzz --casos N` ajusta o
+volume.
+
+### Regressão histórica — `pnpm regressao`
+
+Prova que a suíte ainda detecta os bugs reais já corrigidos: para cada bug, um
+snapshot reintroduz a falha e o ataque pareado PRECISA acusá-la, enquanto o
+código atual PRECISA resistir. Cobre 6 bugs (keystream ignorando o IV,
+combinador simétrico, checksum sem finalização, poucas rodadas de difusão,
+chave só no estado inicial e base64 não estrito) e, no bash, a preservação de
+NUL.
+
+### Fuzzing de memória — `pnpm fuzz:memoria`
+
+`go test -fuzz` e `cargo fuzz` (nightly) no decodificador de token com bytes
+arbitrários, por 5 minutos cada, esperando zero panics. O Rust roda sem
+sanitizer por não haver `gcc`/`clang` no ambiente. Aceita a duração em segundos:
+`pnpm fuzz:memoria 60`.
 
 ## Como escrever um novo ataque
 
