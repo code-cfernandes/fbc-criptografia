@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Test\Helpers;
+namespace Application\Tests\Helpers;
 
 use Application\Core\Helpers\Criptografia;
 use RuntimeException;

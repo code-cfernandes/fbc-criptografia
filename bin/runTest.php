@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-use Application\Test\Helpers\CriptografiaTest;
+use Application\Tests\Helpers\CriptografiaTest;
 
 try {
     $tests = [
