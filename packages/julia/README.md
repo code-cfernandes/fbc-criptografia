@@ -3,7 +3,7 @@
 ![Julia](https://img.shields.io/badge/Julia-1.13+-9558B2?logo=julia&logoColor=white)
 
 Implementação da cifra caseira **FBC** em Julia, com a suíte de ataques
-criptográficos (fase 1: 8 ataques). Faz parte do
+criptográficos (50 ataques). Faz parte do
 [monorepo Criptografia FBC](../../README.md).
 
 Sem dependências externas: usa apenas os stdlibs `Base64` e `Random`.
@@ -26,7 +26,7 @@ src/
     ├── SkipAtaqueException.jl
     ├── SuiteDeAtaques.jl
     ├── Util.jl
-    └── Ataques/*.jl               # 8 ataques
+    └── Ataques/*.jl               # 50 ataques
 bin/executar_testes.jl             # runner da suíte
 ```
 

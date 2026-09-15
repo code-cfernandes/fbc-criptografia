@@ -2,8 +2,8 @@
 
 ![Rust](https://img.shields.io/badge/Rust-1.98+-000000?logo=rust&logoColor=white)
 
-Implementação da cifra caseira **FBC** em Rust, com a suíte de 8 ataques
-criptográficos da fase 1. Faz parte do [monorepo Criptografia FBC](../../README.md).
+Implementação da cifra caseira **FBC** em Rust, com a suíte de 50 ataques
+criptográficos. Faz parte do [monorepo Criptografia FBC](../../README.md).
 
 Sem dependências externas (sem crates): o base64url é implementado à mão e os
 bytes aleatórios vêm de `/dev/urandom` (com fallback por tempo + pid).
@@ -29,7 +29,7 @@ src/
     ├── resultado_ataque.rs          # ResultadoAtaque + Severidade
     ├── suite_de_ataques.rs
     ├── util.rs
-    └── ataques/*.rs                 # 8 ataques
+    └── ataques/*.rs                 # 50 ataques
 ```
 
 ## Como rodar

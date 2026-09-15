@@ -2,10 +2,8 @@
 
 Obrigado pelo interesse. Este é um projeto educacional: a cifra "FBC" é
 implementada em dez linguagens (PHP, Node.js, TypeScript, Python, Bash, Java,
-Go, Rust, Dart e Julia) e uma mesma suíte de ataques roda contra todas. As cinco
-primeiras já cobrem os **50 ataques**; Java, Go, Rust, Dart e Julia estão na
-**fase 1** (cifra + 8 ataques). O objetivo é manter todas **compatíveis byte a
-byte** e a suíte **verde**.
+Go, Rust, Dart e Julia) e uma mesma suíte de **50 ataques** roda contra todas. O
+objetivo é manter todas **compatíveis byte a byte** e a suíte **verde**.
 
 ## Pré-requisitos
 
@@ -188,9 +186,9 @@ AtaqueX() {
 Registre o nome da função no array `ATAQUES` em
 `packages/bash/bin/executar_testes.sh`.
 
-### Java / Go / Rust / Dart / Julia (fase 1)
+### Java / Go / Rust / Dart / Julia
 
-Essas linguagens já têm a cifra, a infraestrutura e 8 ataques. O padrão é o
+Essas linguagens têm a cifra, a infraestrutura e os 50 ataques. O padrão é o
 mesmo (um alvo + `nome()`/`executar(alvo)` + registro no runner), mas com o
 layout idiomático de cada uma:
 
@@ -200,8 +198,8 @@ layout idiomático de cada uma:
 - Dart: `lib/Seguranca/Ataques/AtaqueX.dart` (estende `Ataque`), registre em `bin/executar_testes.dart`.
 - Julia: `src/Seguranca/Ataques/AtaqueX.jl` (subtipo de `Ataque`), registre em `bin/executar_testes.jl`.
 
-Veja o README de cada pacote para detalhes. Os ataques da fase 2 devem ser
-portados com os mesmos nomes e limiares das outras linguagens.
+Veja o README de cada pacote para detalhes. Novos ataques devem ser portados
+com os mesmos nomes e limiares em todas as linguagens.
 
 ## Convenções
 
@@ -219,6 +217,26 @@ portados com os mesmos nomes e limiares das outras linguagens.
   amostras.
 - Não comite segredos: o `.env` é ignorado pelo git.
 
+## Versionamento (SemVer)
+
+Todos os pacotes compartilham a mesma versão (versionamento travado), no formato
+`MAJOR.MINOR.PATCH`:
+
+- **MAJOR**: mudanças incompatíveis (ex.: alterar o formato do token ou o
+  contrato dos ataques de forma que quebre quem consome).
+- **MINOR**: novas funcionalidades compatíveis (ex.: novos ataques, nova
+  linguagem).
+- **PATCH**: correções compatíveis (ex.: corrigir um ataque, ajustar limiar).
+
+Para bumpar a versão de tudo de uma vez:
+
+```bash
+pnpm versao patch    # ou minor / major / 1.2.3
+```
+
+O script atualiza o `package.json` da raiz, de cada pacote e o `composer.json` do
+PHP. Toda mudança relevante deve ser registrada em [CHANGELOG.md](CHANGELOG.md).
+
 ## Checklist antes de abrir um PR
 
 - [ ] O novo ataque está registrado no runner da(s) linguagem(ns) afetada(s).
@@ -226,3 +244,4 @@ portados com os mesmos nomes e limiares das outras linguagens.
 - [ ] `pnpm typecheck:typescript` passa sem erros nem casts desnecessários.
 - [ ] Se a cifra mudou, o vetor de referência é o mesmo em todas.
 - [ ] Nomes e mensagens em português, sem segredos.
+- [ ] A versão foi bumpada (`pnpm versao ...`) e o `CHANGELOG.md` atualizado.

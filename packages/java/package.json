@@ -3,5 +3,6 @@
   "private": true,
   "scripts": {
     "test": "bash bin/executar_testes.sh"
-  }
+  },
+  "version": "1.0.0"
 }

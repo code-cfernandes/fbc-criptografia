@@ -3,7 +3,7 @@
 ![Java](https://img.shields.io/badge/Java-21+-ED8B00?logo=openjdk&logoColor=white)
 
 Implementação da cifra caseira **FBC** em Java, com a suíte de ataques
-criptográficos da fase 1 (8 ataques). Faz parte do
+criptográficos (50 ataques). Faz parte do
 [monorepo Criptografia FBC](../../README.md).
 
 Sem dependências externas: usa apenas a biblioteca padrão (`java.security`,
@@ -28,7 +28,7 @@ src/main/java/fbc/
     ├── SkipAtaqueException.java
     ├── SuiteDeAtaques.java
     ├── Util.java
-    └── Ataques/*.java               # 8 ataques (fase 1)
+    └── Ataques/*.java               # 50 ataques
 bin/executar_testes.sh               # compila e roda a suíte
 ```
 

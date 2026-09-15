@@ -3,7 +3,7 @@
 ![Dart](https://img.shields.io/badge/Dart-3.13+-0175C2?logo=dart&logoColor=white)
 
 Implementação da cifra caseira **FBC** em Dart, com a suíte de ataques
-criptográficos (fase 1: 8 ataques). Faz parte do
+criptográficos (50 ataques). Faz parte do
 [monorepo Criptografia FBC](../../README.md).
 
 Sem dependências externas — apenas `dart:convert`, `dart:io` e `dart:typed_data`.
@@ -25,7 +25,7 @@ lib/
     ├── SkipAtaqueException.dart
     ├── SuiteDeAtaques.dart
     ├── Util.dart
-    └── Ataques/*.dart             # ataques da fase 1
+    └── Ataques/*.dart             # 50 ataques
 bin/executar_testes.dart           # runner da suíte
 ```
 

@@ -1,7 +1,12 @@
+using Printf
+
 """Inteiro aleatório em [min, max], inclusivo (equivalente ao random_int do PHP)."""
 function random_int(min::Integer, max::Integer)
     return rand(min:max)
 end
+
+"""Formata com número fixo de casas decimais (equivalente ao toFixed do JS)."""
+fmt(x::Real, casas::Integer) = @sprintf("%.*f", casas, x)
 
 """N bytes aleatórios (equivalente ao random_bytes do PHP)."""
 function random_bytes(n::Integer)
@@ -42,6 +47,23 @@ function contar_bits_buffer(buf::AbstractVector{UInt8})
         total += contar_bits1(b)
     end
     return total
+end
+
+"""XOR de dois buffers, truncado ao menor comprimento."""
+function xor_bytes(a::AbstractVector{UInt8}, b::AbstractVector{UInt8})
+    len = min(length(a), length(b))
+    return UInt8[a[i] ⊻ b[i] for i in 1:len]
+end
+
+"""Bits de um buffer, do mais significativo para o menos (MSB primeiro)."""
+function bits_msb(bytes::AbstractVector{UInt8})
+    bits = Int[]
+    for byte in bytes
+        for b in 7:-1:0
+            push!(bits, Int((byte >> b) & 0x01))
+        end
+    end
+    return bits
 end
 
 """Fisher-Yates: embaralha uma cópia do array."""

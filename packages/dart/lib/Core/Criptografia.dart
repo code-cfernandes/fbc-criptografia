@@ -315,5 +315,9 @@ String decrypt(String text) {
   }
 
   final encKeystream = gerarKeystream(key, iv, 'enc', ciphertext.length);
-  return utf8.decode(xorBytes(ciphertext, encKeystream));
+  // allowMalformed replica o `Buffer.toString('utf8')` do Node e o
+  // `String::from_utf8_lossy` do Rust: bytes inválidos viram U+FFFD em vez de
+  // lançar. Sem isso, dados binários arbitrários não sobrevivem à ida-e-volta
+  // (os ataques AtaqueIdaEVoltaBinario e AtaqueMensagemLonga dependem disso).
+  return utf8.decode(xorBytes(ciphertext, encKeystream), allowMalformed: true);
 }

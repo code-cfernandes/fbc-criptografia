@@ -1,6 +1,6 @@
 {
   "name": "@criptografia/julia",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Implementação da cifra FBC em Julia com a suíte de ataques.",
   "scripts": {

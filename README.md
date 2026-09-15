@@ -12,13 +12,13 @@
 ![Julia](https://img.shields.io/badge/Julia-1.13+-9558B2?logo=julia&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)
 ![ataques](https://img.shields.io/badge/ataques-50%2F50-success)
+![versão](https://img.shields.io/badge/vers%C3%A3o-1.0.0-blue)
 
 Monorepo educacional com a mesma cifra caseira ("FBC") implementada em dez
 pacotes — **PHP, Node.js, TypeScript, Python, Bash, Java, Go, Rust, Dart e
 Julia** — e uma suíte com **50 ataques criptográficos** que roda contra cada
-implementação. As cinco primeiras linguagens cobrem os 50 ataques; Java, Go,
-Rust, Dart e Julia estão na **fase 1** (cifra + 8 ataques), com o restante em
-portabilidade.
+implementação. Todas as dez linguagens estão em paridade: **50/50 ataques** e o
+mesmo vetor de referência byte a byte.
 
 > **Aviso:** é uma cifra caseira, feita para estudo e para exercitar o raciocínio
 > de criptoanálise. Ela **não** foi revisada e **não** deve ser usada em produção.
@@ -83,11 +83,11 @@ A chave deve ter exatamente **32 bytes** e é lida da variável de ambiente
 | `packages/typescript` | TypeScript 7+ | 50 | [README](packages/typescript/README.md) |
 | `packages/python` | Python 3.12+ | 50 | [README](packages/python/README.md) |
 | `packages/bash` | Bash 4.3+ | 50 | [README](packages/bash/README.md) |
-| `packages/java` | Java 21+ | 8 (fase 1) | [README](packages/java/README.md) |
-| `packages/go` | Go 1.27+ | 8 (fase 1) | [README](packages/go/README.md) |
-| `packages/rust` | Rust 1.98+ | 8 (fase 1) | [README](packages/rust/README.md) |
-| `packages/dart` | Dart 3.13+ | 8 (fase 1) | [README](packages/dart/README.md) |
-| `packages/julia` | Julia 1.13+ | 8 (fase 1) | [README](packages/julia/README.md) |
+| `packages/java` | Java 21+ | 50 | [README](packages/java/README.md) |
+| `packages/go` | Go 1.27+ | 50 | [README](packages/go/README.md) |
+| `packages/rust` | Rust 1.98+ | 50 | [README](packages/rust/README.md) |
+| `packages/dart` | Dart 3.13+ | 50 | [README](packages/dart/README.md) |
+| `packages/julia` | Julia 1.13+ | 50 | [README](packages/julia/README.md) |
 
 Todos os pacotes têm a mesma arquitetura conceitual: uma pasta `Core` com a
 cifra, uma pasta `Seguranca` com a infraestrutura da suíte (`CriptografiaAlvo`,
@@ -354,10 +354,9 @@ em [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Resultado atual
 
-As dez implementações resistem aos ataques que já cobrem (50 nas linguagens da
-fase completa, 8 nas da fase 1). Como todas compartilham a mesma lógica byte a
-byte, o vetor de referência (chave `"K"` × 32, IV zero, propósito `enc`,
-32 bytes) é idêntico em todas:
+As dez implementações resistem aos 50 ataques. Como todas compartilham a mesma
+lógica byte a byte, o vetor de referência (chave `"K"` × 32, IV zero, propósito
+`enc`, 32 bytes) é idêntico em todas:
 
 ```
 219a73a5bdb588b63187fa656d1492e0728c73ef526f6c525cf37cfb0f125249
@@ -383,11 +382,26 @@ implementação decifram nas demais (ataque `AtaqueInteroperabilidade`).
   NUL em strings.
 - **PHP** usa autoload PSR-4 (`Application\` → `src/`) e o script
   `bin/runTest.php` carrega a chave via `.env` (veja `src/Env/DotEnv.php`).
-- **Fase 1 (Java/Go/Rust/Dart/Julia)**: cobrem a cifra, a infraestrutura e 8
-  ataques (ida-e-volta, adulteração, determinismo, interoperabilidade, colisão
-  de IV, bytes fixos, chave errada e validação de chave). O restante dos ataques
-  será portado na fase 2. Cada runner já sai com código `!= 0` se achar
-  vulnerabilidade.
+- **Paridade total**: as dez linguagens cobrem os 50 ataques e o mesmo KAT;
+  cada runner sai com código `!= 0` se achar vulnerabilidade.
 - **Toolchains**: Go/Rust/Dart/Julia foram instalados user-local (sem root);
   Rust usa o linker `cc` (wrapper do `zig cc`) por não haver `gcc`/`clang` no
   sistema.
+
+## Versionamento
+
+O projeto segue [SemVer](https://semver.org/lang/pt-BR/) e mantém **todos os
+pacotes na mesma versão** (versionamento travado). As mudanças ficam registradas
+no [CHANGELOG.md](CHANGELOG.md).
+
+Para atualizar a versão de todos os pacotes de uma vez:
+
+```bash
+pnpm versao patch     # 1.0.0 -> 1.0.1
+pnpm versao minor     # 1.0.0 -> 1.1.0
+pnpm versao major     # 1.0.0 -> 2.0.0
+pnpm versao 1.2.3     # define uma versão explícita
+```
+
+O script (`scripts/bump-versao.mjs`, sem dependências) atualiza o `package.json`
+da raiz, o de cada pacote e o `composer.json` do PHP, e imprime o que mudou.

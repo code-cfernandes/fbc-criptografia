@@ -1,6 +1,6 @@
 {
   "name": "criptografia",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Monorepo com as implementações da cifra FBC em várias linguagens e a suíte de ataques.",
   "packageManager": "pnpm@11.14.0",
@@ -9,16 +9,17 @@
   },
   "scripts": {
     "test": "pnpm -r --no-bail test",
-    "test:php": "pnpm --filter @criptografia/php test",
-    "test:node": "pnpm --filter @criptografia/node test",
-    "test:python": "pnpm --filter @criptografia/python test",
-    "test:typescript": "pnpm --filter @criptografia/typescript test",
-    "test:bash": "pnpm --filter @criptografia/bash test",
-    "test:java": "pnpm --filter @criptografia/java test",
-    "test:go": "pnpm --filter @criptografia/go test",
-    "test:rust": "pnpm --filter @criptografia/rust test",
-    "test:dart": "pnpm --filter @criptografia/dart test",
-    "test:julia": "pnpm --filter @criptografia/julia test",
-    "typecheck:typescript": "pnpm --filter @criptografia/typescript typecheck"
+    "test:php": "time pnpm --filter @criptografia/php test",
+    "test:node": "time pnpm --filter @criptografia/node test",
+    "test:python": "time pnpm --filter @criptografia/python test",
+    "test:typescript": "time pnpm --filter @criptografia/typescript test",
+    "test:bash": "time pnpm --filter @criptografia/bash test",
+    "test:java": "time pnpm --filter @criptografia/java test",
+    "test:go": "time pnpm --filter @criptografia/go test",
+    "test:rust": "time pnpm --filter @criptografia/rust test",
+    "test:dart": "time pnpm --filter @criptografia/dart test",
+    "test:julia": "time pnpm --filter @criptografia/julia test",
+    "typecheck:typescript": "pnpm --filter @criptografia/typescript typecheck",
+    "versao": "node scripts/bump-versao.mjs"
   }
 }
