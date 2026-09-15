@@ -41,6 +41,13 @@ interface AlvoCriptografico
      */
     public function gerarKeystreamBruto(string $key, string $iv, string $proposito, int $tamanho): ?string;
 
+    /**
+     * Chama o checksum() interno diretamente, se a cifra expuser essa
+     * camada (via Reflection, por exemplo). Retorne null se não for
+     * aplicável - os testes de colisão de MAC serão pulados.
+     */
+    public function checksumBruto(string $dados, string $key): ?string;
+
     /** Uma chave válida pra usar nos testes. */
     public function chaveDeTeste(): string;
 

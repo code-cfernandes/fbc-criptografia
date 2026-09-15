@@ -16,6 +16,9 @@ use Application\Core\Seguranca\Ataques\AtaqueIVsDegenerados;
 use Application\Core\Seguranca\Ataques\AtaqueCorrelacaoMesmoPlaintext;
 use Application\Core\Seguranca\Ataques\AtaqueReusoIV;
 use Application\Core\Seguranca\Ataques\AtaqueVetorDeterministico;
+use Application\Core\Seguranca\Ataques\AtaqueTiming;
+use Application\Core\Seguranca\Ataques\AtaqueColisaoChecksum;
+use Application\Core\Seguranca\Ataques\AtaqueEntropiaIV;
 
 $alvo = new CriptografiaAlvo();
 
@@ -32,7 +35,10 @@ $suite
     ->adicionar(new AtaqueIVsDegenerados())
     ->adicionar(new AtaqueCorrelacaoMesmoPlaintext())
     ->adicionar(new AtaqueReusoIV())
-    ->adicionar(new AtaqueVetorDeterministico());
+    ->adicionar(new AtaqueVetorDeterministico())
+    ->adicionar(new AtaqueTiming())
+    ->adicionar(new AtaqueColisaoChecksum())
+    ->adicionar(new AtaqueEntropiaIV());
 
 $passou = $suite->rodarEImprimir($alvo);
 

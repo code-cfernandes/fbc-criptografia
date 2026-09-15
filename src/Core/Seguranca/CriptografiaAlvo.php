@@ -56,6 +56,13 @@ class CriptografiaAlvo implements AlvoCriptografico
         return $metodo->invoke(null, $key, $iv, $proposito, $tamanho);
     }
 
+    public function checksumBruto(string $dados, string $key): ?string
+    {
+        $metodo = $this->reflexao->getMethod('checksum');
+        $metodo->setAccessible(true);
+        return $metodo->invoke(null, $dados, $key);
+    }
+
     public function chaveDeTeste(): string
     {
         return $this->chaveTeste;
