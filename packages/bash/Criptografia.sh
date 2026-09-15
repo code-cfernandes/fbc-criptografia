@@ -10,12 +10,12 @@
 # comportamento aqui quebraria compatibilidade com as outras linguagens.
 #
 # Uso:
-#   export IA_CRIPT_KEY_NKC='sua-chave-de-32-bytes-aqui-ok!!'
+#   export FBC_KEY='sua-chave-de-32-bytes-aqui-ok!!'
 #   ./criptografia.sh encrypt "texto secreto"
 #   ./criptografia.sh decrypt "FBC...token..."
 #
 TAM_BLOCO=32
-DISTANCIAS_DIFUSAO=(3 5 11 19 41)
+DISTANCIAS_DIFUSAO=(3 5 11 19 41 3 5 11 19 41)  # dobrado pra combater ataque integral
 DIGITOS_PI='31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679'
 
 # ---------------------------------------------------------------
@@ -263,9 +263,9 @@ checksum() {
 
 get_key_bytes() {
     local -n _saida_key=$1
-    local _valor_env=${IA_CRIPT_KEY_NKC:-}
+    local _valor_env=${FBC_KEY:-}
     if [ -z "$_valor_env" ]; then
-        echo "Erro: defina IA_CRIPT_KEY_NKC no ambiente." >&2
+        echo "Erro: defina FBC_KEY no ambiente." >&2
         exit 1
     fi
     local -a temp

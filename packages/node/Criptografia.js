@@ -17,7 +17,7 @@ const crypto = require('crypto');
 const TAM_BLOCO = 32;
 
 // Mesmas distâncias da versão PHP (Fibonacci -> N-ésimo primo, pulando o 2).
-const DISTANCIAS_DIFUSAO = [3, 5, 11, 19, 41];
+const DISTANCIAS_DIFUSAO = [3, 5, 11, 19, 41, 3, 5, 11, 19, 41]; // dobrado pra combater ataque integral
 
 const DIGITOS_PI =
   '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';
@@ -177,7 +177,7 @@ function base64urlDecode(str) {
 }
 
 function getKey() {
-  const key = process.env.IA_CRIPT_KEY_NKC;
+  const key = process.env.FBC_KEY;
   if (!key || Buffer.byteLength(key, 'utf8') !== 32) {
     throw new Error('Chave deve ter 32 bytes.');
   }

@@ -1,0 +1,17 @@
+{
+  "name": "criptografia",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo com as implementações da cifra NKC em várias linguagens e a suíte de ataques.",
+  "packageManager": "pnpm@11.14.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "pnpm -r --no-bail test",
+    "test:php": "pnpm --filter @criptografia/php test",
+    "test:node": "pnpm --filter @criptografia/node test",
+    "test:python": "pnpm --filter @criptografia/python test",
+    "test:bash": "pnpm --filter @criptografia/bash test"
+  }
+}

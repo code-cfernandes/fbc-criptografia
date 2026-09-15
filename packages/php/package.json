@@ -1,0 +1,10 @@
+{
+  "name": "@criptografia/php",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Implementação da cifra NKC em PHP com a suíte de ataques.",
+  "scripts": {
+    "test": "composer suite",
+    "test:roundtrip": "composer test"
+  }
+}

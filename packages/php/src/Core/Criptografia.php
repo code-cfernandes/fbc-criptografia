@@ -32,7 +32,7 @@ class Criptografia
      * fib(3)=2 -> 2º primo=3 | fib(4)=3 -> 3º primo=5 | fib(5)=5 -> 5º primo=11
      * fib(6)=8 -> 8º primo=19 | fib(7)=13 -> 13º primo=41
      */
-    private const DISTANCIAS_DIFUSAO = [3, 5, 11, 19, 41];
+    private const DISTANCIAS_DIFUSAO = [3, 5, 11, 19, 41, 3, 5, 11, 19, 41]; // dobrado pra combater ataque integral
 
     /** Dígitos de Pi (constante pública e fixa - "nothing up my sleeve"). */
     private const DIGITOS_PI = '31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679';

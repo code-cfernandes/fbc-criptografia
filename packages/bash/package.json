@@ -1,0 +1,9 @@
+{
+  "name": "@criptografia/bash",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Implementação da cifra NKC em Bash (suíte de ataques ainda não implementada).",
+  "scripts": {
+    "test": "echo 'Suíte de ataques ainda não implementada para Bash.' >&2 && exit 1"
+  }
+}

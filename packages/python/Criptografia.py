@@ -18,7 +18,7 @@ import re
 TAM_BLOCO = 32
 
 # Mesmas distâncias da versão PHP (Fibonacci -> N-ésimo primo, pulando o 2).
-DISTANCIAS_DIFUSAO = [3, 5, 11, 19, 41]
+DISTANCIAS_DIFUSAO = [3, 5, 11, 19, 41, 3, 5, 11, 19, 41]  # dobrado pra combater ataque integral
 
 DIGITOS_PI = (
     "31415926535897932384626433832795028841971693993751058209749445923078"
@@ -154,7 +154,7 @@ def base64url_decode(data: str) -> bytes:
 
 
 def _get_key() -> bytes:
-    key = os.environ.get("IA_CRIPT_KEY_NKC", "")
+    key = os.environ.get("FBC_KEY", "")
     key_bytes = key.encode("utf-8")
     if len(key_bytes) != 32:
         raise ValueError("Chave deve ter 32 bytes.")
