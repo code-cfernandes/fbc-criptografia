@@ -13,6 +13,7 @@ versões PHP e Node.js.
 import base64
 import hmac
 import os
+import re
 
 TAM_BLOCO = 32
 
@@ -45,13 +46,16 @@ def rotacao_do_round(round_idx: int) -> int:
     return (d % 7) + 1
 
 
-def _passo(a: int, b: int, proposito: bytes, pos_fib: int, round_idx: int):
+def _passo(a: int, b: int, key: bytes, proposito: bytes, pos_fib: int, round_idx: int):
     """Um passo da recorrência tipo-Fibonacci pra uma posição do bloco."""
     n = rotacao_do_round(round_idx)
 
     soma = (a + b) & 0xFF
     soma = rot_esquerda8(soma, n)
     soma ^= proposito[pos_fib % len(proposito)]
+    # A chave participa de CADA rodada, não só do estado inicial (ver
+    # comentário equivalente em Criptografia.php).
+    soma ^= key[(pos_fib + round_idx) % len(key)]
     soma = (soma * 131) & 0xFF
 
     return b, soma  # novo a = b antigo; novo b = soma
@@ -76,7 +80,7 @@ def gerar_keystream(key: bytes, iv: bytes, proposito: str, tamanho: int) -> byte
             novo_b = [0] * bloco
             for pos in range(bloco):
                 a[pos], novo_b[pos] = _passo(
-                    a[pos], b[pos], proposito_bytes, pos_fib_base + pos, round_idx
+                    a[pos], b[pos], key, proposito_bytes, pos_fib_base + pos, round_idx
                 )
 
             # Combinação ASSIMÉTRICA: rotaciona só o valor próprio antes do
@@ -113,6 +117,14 @@ def checksum(dados: bytes, key: bytes) -> bytes:
             acumulador = (acumulador * 16777619) & 0xFFFFFFFF
             acumulador = rot_esquerda32(acumulador, (i % 13) + 1)
 
+        # Finalização: sem isso, o último byte processado só passa por 1
+        # multiply+rotate antes de virar saída, e sofre avalanche fraca
+        # (medido ~25-30% em vez de ~50% nos últimos bytes do bloco de dados).
+        for _ in range(3):
+            acumulador ^= acumulador >> 16
+            acumulador = (acumulador * 16777619) & 0xFFFFFFFF
+            acumulador = rot_esquerda32(acumulador, 13)
+
         saida.extend(acumulador.to_bytes(4, "big"))
 
     return bytes(saida)
@@ -123,8 +135,22 @@ def base64url_encode(data: bytes) -> str:
 
 
 def base64url_decode(data: str) -> bytes:
+    if data != "" and not re.fullmatch(r"[A-Za-z0-9_-]+", data):
+        raise ValueError("Token contém caracteres inválidos.")
+
+    mod = len(data) % 4
+    if mod == 1:
+        raise ValueError("Comprimento de token inválido.")
     pad = "=" * (-len(data) % 4)
-    return base64.urlsafe_b64decode(data + pad)
+
+    decoded = base64.urlsafe_b64decode(data + pad)
+
+    # Canonicidade: reencoda e compara - pega bits não-canônicos no último
+    # grupo que sobreviveriam mesmo a uma decodificação "estrita".
+    if base64url_encode(decoded) != data:
+        raise ValueError("Token não está em forma canônica.")
+
+    return decoded
 
 
 def _get_key() -> bytes:

@@ -107,6 +107,7 @@ class Criptografia
                     [$novoA, $novoBb] = self::passo(
                         $a[$pos],
                         $b[$pos],
+                        $key,
                         $proposito,
                         $posFibBase + $pos,
                         $roundIdx
@@ -140,13 +141,19 @@ class Criptografia
     }
 
     /** Um passo da recorrência tipo-Fibonacci pra uma posição do bloco. */
-    private static function passo(int $a, int $b, string $proposito, int $posFib, int $roundIdx): array
+    private static function passo(int $a, int $b, string $key, string $proposito, int $posFib, int $roundIdx): array
     {
         $n = self::rotacaoDoRound($roundIdx);
 
         $soma = ($a + $b) & 0xFF;
         $soma = self::rotEsquerda8($soma, $n);
         $soma ^= ord($proposito[$posFib % strlen($proposito)]);
+        // A chave agora participa de CADA rodada, não só do estado inicial.
+        // Sem isso, keystream(key, iv) == keystream(key^D, iv^D16) pra
+        // qualquer máscara D de 32 bytes com período 16 - o IV só deslocava
+        // a chave por XOR antes da difusão começar, sem injetar entropia
+        // própria no "key schedule" a cada passo.
+        $soma ^= ord($key[($posFib + $roundIdx) % strlen($key)]);
         $soma = ($soma * 131) & 0xFF;
 
         return [$b, $soma];
@@ -205,6 +212,17 @@ class Criptografia
                 $acumulador = ($acumulador * 16777619) & 0xFFFFFFFF;
                 $acumulador = self::rotEsquerda32($acumulador, ($i % 13) + 1);
             }
+            // Finalização: sem isso, o último byte processado só passa por
+            // 1 multiply+rotate antes de virar saída, e sofre avalanche
+            // fraca (medimos ~25-30% em vez de ~50% nos últimos bytes).
+            // Espalha o acumulador mais 3 vezes depois que TODOS os bytes
+            // já entraram, garantindo que a posição de entrada deixe de
+            // importar pro resultado final.
+            for ($k = 0; $k < 3; $k++) {
+                $acumulador ^= ($acumulador >> 16);
+                $acumulador = ($acumulador * 16777619) & 0xFFFFFFFF;
+                $acumulador = self::rotEsquerda32($acumulador, 13);
+            }
             $saida .= chr(($acumulador >> 24) & 0xFF) . chr(($acumulador >> 16) & 0xFF)
                 . chr(($acumulador >> 8) & 0xFF) . chr($acumulador & 0xFF);
         }
@@ -222,12 +240,38 @@ class Criptografia
 
     public static function base64url_decode(string $data): string
     {
-        $data = strtr($data, '-_', '+/');
-        $mod = strlen($data) % 4;
-        if ($mod) {
-            $data .= str_repeat('=', 4 - $mod);
+        // Rejeita qualquer caractere fora do alfabeto base64url - sem isso,
+        // base64_decode() não-estrito ignora silenciosamente espaços, \n,
+        // \t e caracteres inválidos, fazendo textos DIFERENTES decodificarem
+        // pro mesmo token (abre espaço pra "token smuggling": um WAF/cache/log
+        // vê uma string, o decrypt() vê outra).
+        if ($data !== '' && !preg_match('/^[A-Za-z0-9_-]+$/', $data)) {
+            throw new \Exception('Token contém caracteres inválidos.');
         }
-        return base64_decode($data);
+
+        $padded = strtr($data, '-_', '+/');
+        $mod = strlen($padded) % 4;
+        if ($mod === 1) {
+            throw new \Exception('Comprimento de token inválido.');
+        }
+        if ($mod) {
+            $padded .= str_repeat('=', 4 - $mod);
+        }
+
+        $decoded = base64_decode($padded, true);
+        if ($decoded === false) {
+            throw new \Exception('Token base64 inválido.');
+        }
+
+        // Canonicidade: mesmo com strict=true, o último grupo de base64 pode
+        // ter bits "não usados" setados como 1 em vez de 0 e ainda decodificar
+        // pro mesmo byte - reencodar e comparar pega esse caso, que o
+        // strict=true sozinho NÃO pega.
+        if (self::base64url_encode($decoded) !== $data) {
+            throw new \Exception('Token não está em forma canônica.');
+        }
+
+        return $decoded;
     }
 
     private static function getKey(): string

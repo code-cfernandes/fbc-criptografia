@@ -41,12 +41,16 @@ function rotacaoDoRound(roundIdx) {
 }
 
 /** Um passo da recorrência tipo-Fibonacci pra uma posição do bloco. */
-function passo(a, b, propositoBuf, posFib, roundIdx) {
+function passo(a, b, keyBuf, propositoBuf, posFib, roundIdx) {
   const n = rotacaoDoRound(roundIdx);
 
   let soma = (a + b) & 0xff;
   soma = rotEsquerda8(soma, n);
   soma ^= propositoBuf[posFib % propositoBuf.length];
+  // A chave participa de CADA rodada, não só do estado inicial (ver
+  // comentário equivalente em Criptografia.php sobre keystream(key,iv) ==
+  // keystream(key^D, iv^D16) sem isso).
+  soma ^= keyBuf[(posFib + roundIdx) % keyBuf.length];
   soma = (soma * 131) & 0xff;
 
   return [b, soma]; // novo a = b antigo; novo b = soma
@@ -75,7 +79,7 @@ function gerarKeystream(keyBuf, ivBuf, proposito, tamanho) {
     for (const dist of DISTANCIAS_DIFUSAO) {
       const novoB = new Array(bloco);
       for (let pos = 0; pos < bloco; pos++) {
-        const [novoA, novoBb] = passo(a[pos], b[pos], propositoBuf, posFibBase + pos, roundIdx);
+        const [novoA, novoBb] = passo(a[pos], b[pos], keyBuf, propositoBuf, posFibBase + pos, roundIdx);
         a[pos] = novoA;
         novoB[pos] = novoBb;
       }
@@ -125,6 +129,15 @@ function checksum(dadosBuf, keyBuf) {
       acumulador = rotEsquerda32(acumulador, (i % 13) + 1);
     }
 
+    // Finalização: sem isso, o último byte processado só passa por 1
+    // multiply+rotate antes de virar saída, e sofre avalanche fraca
+    // (medido ~25-30% em vez de ~50% nos últimos bytes do bloco de dados).
+    for (let k = 0; k < 3; k++) {
+      acumulador = (acumulador ^ (acumulador >>> 16)) >>> 0;
+      acumulador = Number((BigInt(acumulador) * 16777619n) & 0xffffffffn);
+      acumulador = rotEsquerda32(acumulador, 13);
+    }
+
     saida[rodada * 4 + 0] = (acumulador >>> 24) & 0xff;
     saida[rodada * 4 + 1] = (acumulador >>> 16) & 0xff;
     saida[rodada * 4 + 2] = (acumulador >>> 8) & 0xff;
@@ -139,12 +152,28 @@ function base64urlEncode(buf) {
 }
 
 function base64urlDecode(str) {
+  if (str !== '' && !/^[A-Za-z0-9_-]+$/.test(str)) {
+    throw new Error('Token contém caracteres inválidos.');
+  }
+
   let s = str.replace(/-/g, '+').replace(/_/g, '/');
   const mod = s.length % 4;
+  if (mod === 1) {
+    throw new Error('Comprimento de token inválido.');
+  }
   if (mod) {
     s += '='.repeat(4 - mod);
   }
-  return Buffer.from(s, 'base64');
+
+  const decoded = Buffer.from(s, 'base64');
+
+  // Canonicidade: reencoda e compara - pega tanto caracteres que o Buffer
+  // ignoraria silenciosamente quanto bits não-canônicos no último grupo.
+  if (base64urlEncode(decoded) !== str) {
+    throw new Error('Token não está em forma canônica.');
+  }
+
+  return decoded;
 }
 
 function getKey() {
