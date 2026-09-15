@@ -41,6 +41,16 @@ import { AtaqueDiferencialKeystream } from '../src/Seguranca/Ataques/AtaqueDifer
 import { AtaqueDistribuicaoPorPosicao } from '../src/Seguranca/Ataques/AtaqueDistribuicaoPorPosicao.ts';
 import { AtaqueCorrelacaoPosicoes } from '../src/Seguranca/Ataques/AtaqueCorrelacaoPosicoes.ts';
 import { AtaquePreditorDeBits } from '../src/Seguranca/Ataques/AtaquePreditorDeBits.ts';
+import { AtaqueInteroperabilidade } from '../src/Seguranca/Ataques/AtaqueInteroperabilidade.ts';
+import { AtaqueSAC } from '../src/Seguranca/Ataques/AtaqueSAC.ts';
+import { AtaqueBIC } from '../src/Seguranca/Ataques/AtaqueBIC.ts';
+import { AtaqueChaveRelacionada } from '../src/Seguranca/Ataques/AtaqueChaveRelacionada.ts';
+import { AtaqueRotacional } from '../src/Seguranca/Ataques/AtaqueRotacional.ts';
+import { AtaqueChavesFracas } from '../src/Seguranca/Ataques/AtaqueChavesFracas.ts';
+import { AtaqueAproximacaoLinear } from '../src/Seguranca/Ataques/AtaqueAproximacaoLinear.ts';
+import { AtaqueCiphertextEstatistico } from '../src/Seguranca/Ataques/AtaqueCiphertextEstatistico.ts';
+import { AtaqueMac } from '../src/Seguranca/Ataques/AtaqueMac.ts';
+import { AtaqueLengthExtension } from '../src/Seguranca/Ataques/AtaqueLengthExtension.ts';
 
 const alvo = new CriptografiaAlvo();
 
@@ -85,7 +95,17 @@ suite
   .adicionar(new AtaqueDiferencialKeystream())
   .adicionar(new AtaqueDistribuicaoPorPosicao())
   .adicionar(new AtaqueCorrelacaoPosicoes())
-  .adicionar(new AtaquePreditorDeBits());
+  .adicionar(new AtaquePreditorDeBits())
+  .adicionar(new AtaqueInteroperabilidade())
+  .adicionar(new AtaqueSAC())
+  .adicionar(new AtaqueBIC())
+  .adicionar(new AtaqueChaveRelacionada())
+  .adicionar(new AtaqueRotacional())
+  .adicionar(new AtaqueChavesFracas())
+  .adicionar(new AtaqueAproximacaoLinear())
+  .adicionar(new AtaqueCiphertextEstatistico())
+  .adicionar(new AtaqueMac())
+  .adicionar(new AtaqueLengthExtension());
 
 const passou = suite.rodarEImprimir(alvo);
 

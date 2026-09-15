@@ -43,6 +43,16 @@ const AtaqueDiferencialKeystream = require('../src/Seguranca/Ataques/AtaqueDifer
 const AtaqueDistribuicaoPorPosicao = require('../src/Seguranca/Ataques/AtaqueDistribuicaoPorPosicao.js');
 const AtaqueCorrelacaoPosicoes = require('../src/Seguranca/Ataques/AtaqueCorrelacaoPosicoes.js');
 const AtaquePreditorDeBits = require('../src/Seguranca/Ataques/AtaquePreditorDeBits.js');
+const AtaqueInteroperabilidade = require('../src/Seguranca/Ataques/AtaqueInteroperabilidade.js');
+const AtaqueSAC = require('../src/Seguranca/Ataques/AtaqueSAC.js');
+const AtaqueBIC = require('../src/Seguranca/Ataques/AtaqueBIC.js');
+const AtaqueChaveRelacionada = require('../src/Seguranca/Ataques/AtaqueChaveRelacionada.js');
+const AtaqueRotacional = require('../src/Seguranca/Ataques/AtaqueRotacional.js');
+const AtaqueChavesFracas = require('../src/Seguranca/Ataques/AtaqueChavesFracas.js');
+const AtaqueAproximacaoLinear = require('../src/Seguranca/Ataques/AtaqueAproximacaoLinear.js');
+const AtaqueCiphertextEstatistico = require('../src/Seguranca/Ataques/AtaqueCiphertextEstatistico.js');
+const AtaqueMac = require('../src/Seguranca/Ataques/AtaqueMac.js');
+const AtaqueLengthExtension = require('../src/Seguranca/Ataques/AtaqueLengthExtension.js');
 
 const alvo = new CriptografiaAlvo();
 
@@ -87,7 +97,17 @@ suite
   .adicionar(new AtaqueDiferencialKeystream())
   .adicionar(new AtaqueDistribuicaoPorPosicao())
   .adicionar(new AtaqueCorrelacaoPosicoes())
-  .adicionar(new AtaquePreditorDeBits());
+  .adicionar(new AtaquePreditorDeBits())
+  .adicionar(new AtaqueInteroperabilidade())
+  .adicionar(new AtaqueSAC())
+  .adicionar(new AtaqueBIC())
+  .adicionar(new AtaqueChaveRelacionada())
+  .adicionar(new AtaqueRotacional())
+  .adicionar(new AtaqueChavesFracas())
+  .adicionar(new AtaqueAproximacaoLinear())
+  .adicionar(new AtaqueCiphertextEstatistico())
+  .adicionar(new AtaqueMac())
+  .adicionar(new AtaqueLengthExtension());
 
 const passou = suite.rodarEImprimir(alvo);
 

@@ -45,6 +45,16 @@ use Application\Seguranca\Ataques\AtaqueDiferencialKeystream;
 use Application\Seguranca\Ataques\AtaqueDistribuicaoPorPosicao;
 use Application\Seguranca\Ataques\AtaqueCorrelacaoPosicoes;
 use Application\Seguranca\Ataques\AtaquePreditorDeBits;
+use Application\Seguranca\Ataques\AtaqueInteroperabilidade;
+use Application\Seguranca\Ataques\AtaqueSAC;
+use Application\Seguranca\Ataques\AtaqueBIC;
+use Application\Seguranca\Ataques\AtaqueChaveRelacionada;
+use Application\Seguranca\Ataques\AtaqueRotacional;
+use Application\Seguranca\Ataques\AtaqueChavesFracas;
+use Application\Seguranca\Ataques\AtaqueAproximacaoLinear;
+use Application\Seguranca\Ataques\AtaqueCiphertextEstatistico;
+use Application\Seguranca\Ataques\AtaqueMac;
+use Application\Seguranca\Ataques\AtaqueLengthExtension;
 
 DotEnv::load(__DIR__ . '/.env');
 
@@ -91,7 +101,17 @@ $suite
     ->adicionar(new AtaqueDiferencialKeystream())
     ->adicionar(new AtaqueDistribuicaoPorPosicao())
     ->adicionar(new AtaqueCorrelacaoPosicoes())
-    ->adicionar(new AtaquePreditorDeBits());
+    ->adicionar(new AtaquePreditorDeBits())
+    ->adicionar(new AtaqueInteroperabilidade())
+    ->adicionar(new AtaqueSAC())
+    ->adicionar(new AtaqueBIC())
+    ->adicionar(new AtaqueChaveRelacionada())
+    ->adicionar(new AtaqueRotacional())
+    ->adicionar(new AtaqueChavesFracas())
+    ->adicionar(new AtaqueAproximacaoLinear())
+    ->adicionar(new AtaqueCiphertextEstatistico())
+    ->adicionar(new AtaqueMac())
+    ->adicionar(new AtaqueLengthExtension());
 
 $passou = $suite->rodarEImprimir($alvo);
 

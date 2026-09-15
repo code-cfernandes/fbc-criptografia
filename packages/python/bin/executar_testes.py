@@ -49,6 +49,16 @@ from src.Seguranca.Ataques.AtaqueDiferencialKeystream import AtaqueDiferencialKe
 from src.Seguranca.Ataques.AtaqueDistribuicaoPorPosicao import AtaqueDistribuicaoPorPosicao
 from src.Seguranca.Ataques.AtaqueCorrelacaoPosicoes import AtaqueCorrelacaoPosicoes
 from src.Seguranca.Ataques.AtaquePreditorDeBits import AtaquePreditorDeBits
+from src.Seguranca.Ataques.AtaqueInteroperabilidade import AtaqueInteroperabilidade
+from src.Seguranca.Ataques.AtaqueSAC import AtaqueSAC
+from src.Seguranca.Ataques.AtaqueBIC import AtaqueBIC
+from src.Seguranca.Ataques.AtaqueChaveRelacionada import AtaqueChaveRelacionada
+from src.Seguranca.Ataques.AtaqueRotacional import AtaqueRotacional
+from src.Seguranca.Ataques.AtaqueChavesFracas import AtaqueChavesFracas
+from src.Seguranca.Ataques.AtaqueAproximacaoLinear import AtaqueAproximacaoLinear
+from src.Seguranca.Ataques.AtaqueCiphertextEstatistico import AtaqueCiphertextEstatistico
+from src.Seguranca.Ataques.AtaqueMac import AtaqueMac
+from src.Seguranca.Ataques.AtaqueLengthExtension import AtaqueLengthExtension
 
 
 def main() -> int:
@@ -96,6 +106,16 @@ def main() -> int:
         .adicionar(AtaqueDistribuicaoPorPosicao())
         .adicionar(AtaqueCorrelacaoPosicoes())
         .adicionar(AtaquePreditorDeBits())
+        .adicionar(AtaqueInteroperabilidade())
+        .adicionar(AtaqueSAC())
+        .adicionar(AtaqueBIC())
+        .adicionar(AtaqueChaveRelacionada())
+        .adicionar(AtaqueRotacional())
+        .adicionar(AtaqueChavesFracas())
+        .adicionar(AtaqueAproximacaoLinear())
+        .adicionar(AtaqueCiphertextEstatistico())
+        .adicionar(AtaqueMac())
+        .adicionar(AtaqueLengthExtension())
     )
 
     passou = suite.rodar_e_imprimir(alvo)
