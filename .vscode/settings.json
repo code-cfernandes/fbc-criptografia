@@ -1,0 +1,6 @@
+{
+    "intelephense.environment.includePaths": [
+        "packages/php/src",
+        "packages/php/tests"
+    ]
+}
