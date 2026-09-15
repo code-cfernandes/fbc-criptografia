@@ -1,0 +1,274 @@
+# Criptografia FBC
+
+![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?logo=php&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-4.3+-4EAA25?logo=gnubash&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)
+![ataques](https://img.shields.io/badge/ataques-40%2F40-success)
+
+Monorepo educacional com a mesma cifra caseira ("FBC") implementada em quatro
+linguagens — **PHP, Node.js, Python e Bash** — e uma suíte com **40 ataques
+criptográficos** que roda contra cada implementação.
+
+> **Aviso:** é uma cifra caseira, feita para estudo e para exercitar o raciocínio
+> de criptoanálise. Ela **não** foi revisada e **não** deve ser usada em produção.
+> Para qualquer uso real, use bibliotecas consagradas (libsodium, AES-GCM, etc.).
+
+## Formato do token
+
+```
+FBC + base64url( integridade[32] . ciphertext[n] . iv[16] )
+```
+
+- **integridade** — MAC caseiro de 32 bytes (8 rodadas de um checksum estilo FNV,
+  com finalização para evitar avalanche fraca nos últimos bytes).
+- **ciphertext** — texto cifrado por XOR com o keystream.
+- **iv** — 16 bytes aleatórios por operação.
+
+O keystream é gerado em blocos de 32 bytes por uma recorrência tipo-Fibonacci
+seguida de uma rede de difusão "butterfly" (distâncias que dobram: 3, 5, 11, 19,
+41, repetidas), com rotações derivadas dos dígitos de Pi. A chave participa de
+cada rodada, e não apenas do estado inicial.
+
+A chave deve ter exatamente **32 bytes** e é lida da variável de ambiente
+`FBC_KEY`.
+
+## Requisitos
+
+| Ferramenta | Versão |
+| --- | --- |
+| PHP + Composer | 8.3+ |
+| Node.js + pnpm | 20+ / 11+ |
+| Python | 3.12+ |
+| Bash | 4.3+ (namerefs) |
+
+## Estrutura
+
+```
+.
+├── package.json            # raiz do workspace pnpm
+├── pnpm-workspace.yaml
+└── packages/
+    ├── php/     src/Core  src/Seguranca/{Ataques}  bin  tests
+    ├── node/    src/Core  src/Seguranca/{Ataques}  bin
+    ├── python/  src/Core  src/Seguranca/{Ataques}  bin
+    └── bash/    src/Core  src/Seguranca/{Ataques}  bin
+```
+
+| Pacote | Linguagem | README |
+| --- | --- | --- |
+| `packages/php` | PHP 8.3+ | [packages/php/README.md](packages/php/README.md) |
+| `packages/node` | Node.js 20+ | [packages/node/README.md](packages/node/README.md) |
+| `packages/python` | Python 3.12+ | [packages/python/README.md](packages/python/README.md) |
+| `packages/bash` | Bash 4.3+ | [packages/bash/README.md](packages/bash/README.md) |
+
+Cada pacote segue a mesma organização:
+
+- `src/Core/` — a cifra (`encrypt` / `decrypt`).
+- `src/Seguranca/` — infraestrutura da suíte: `CriptografiaAlvo`,
+  `ResultadoAtaque`, `SuiteDeAtaques` e utilitários.
+- `src/Seguranca/Ataques/` — os 40 ataques, um por arquivo.
+- `bin/executar_testes.*` — runner que executa a suíte e imprime o relatório.
+
+## Como rodar
+
+Instale o workspace:
+
+```bash
+pnpm install
+```
+
+Rode a suíte em todas as linguagens (continua mesmo se uma falhar):
+
+```bash
+pnpm test
+```
+
+Ou individualmente:
+
+```bash
+pnpm test:php
+pnpm test:node
+pnpm test:python
+pnpm test:bash
+```
+
+### PHP
+
+```bash
+cd packages/php
+composer install
+composer suite        # suíte de ataques (bin/executar_testes.php)
+composer test         # ida-e-volta básica (bin/runTest.php)
+```
+
+### Node.js
+
+```bash
+cd packages/node
+node bin/executar_testes.js
+```
+
+### Python
+
+```bash
+cd packages/python
+python3 bin/executar_testes.py
+```
+
+### Bash
+
+```bash
+cd packages/bash
+bash bin/executar_testes.sh
+NKC_ESCALA=10 bash bin/executar_testes.sh   # mais amostras (mais lento)
+```
+
+O bash usa amostras reduzidas por padrão (é ordens de magnitude mais lento). A
+variável `NKC_ESCALA` multiplica esses defaults.
+
+## Uso da cifra
+
+PHP (`namespace Application\Core`):
+
+```php
+putenv('FBC_KEY=uma-chave-de-32-bytes-aqui-ok!!');
+
+$token = Application\Core\Criptografia::encrypt('texto secreto');
+$texto = Application\Core\Criptografia::decrypt($token);
+```
+
+Node.js:
+
+```js
+process.env.FBC_KEY = 'uma-chave-de-32-bytes-aqui-ok!!';
+
+const { encrypt, decrypt } = require('./packages/node/src/Core/Criptografia.js');
+const token = encrypt('texto secreto');
+const texto = decrypt(token);
+```
+
+Python:
+
+```python
+import os
+os.environ['FBC_KEY'] = 'uma-chave-de-32-bytes-aqui-ok!!'
+
+# execute a partir de packages/python (ou adicione a raiz do pacote ao sys.path)
+from src.Core.Criptografia import encrypt, decrypt
+token = encrypt('texto secreto')
+texto = decrypt(token)
+```
+
+Bash:
+
+```bash
+export FBC_KEY='uma-chave-de-32-bytes-aqui-ok!!'
+
+./packages/bash/src/Core/Criptografia.sh encrypt "texto secreto"
+./packages/bash/src/Core/Criptografia.sh decrypt "FBC..."
+```
+
+## Suíte de ataques
+
+Cada ataque implementa `nome()` e `executar(alvo)`, devolvendo um
+`ResultadoAtaque` (`vulneravel`, `severidade`, `detalhes`). A suíte imprime um
+relatório e retorna código de saída diferente de zero quando encontra alguma
+vulnerabilidade.
+
+Os 40 ataques:
+
+1. Ida-e-volta (round trip)
+2. Ida-e-volta com dados binários (inclui NUL)
+3. Mensagens longas (multi-bloco)
+4. Adulteração de bits (integridade)
+5. Colisão no checksum (paradoxo do aniversário)
+6. Linearidade e diferenciais do checksum
+7. Confusão de campos do token (reordenação/deslocamento)
+8. Canonicalização do token (base64 não-canônico)
+9. Tokens malformados (fuzzing de entrada)
+10. Colisão de IV
+11. IVs degenerados (zero, 0xFF, alternado)
+12. Entropia e previsibilidade do IV
+13. Reuso forçado de IV (two-time pad) — demonstração
+14. Separação chave/IV (invariância a key XOR iv)
+15. Diferencial do keystream (delta fixo no IV)
+16. Cobertura de dependência do IV (entrada x saída)
+17. Efeito avalanche
+18. Efeito avalanche da chave
+19. Efeito avalanche do checksum/MAC
+20. Cobertura de dependência (matriz entrada x saída)
+21. Fold estrutural (metades/quartos/oitavos repetidos)
+22. Correlação entre posições do bloco
+23. Distribuição de bytes por posição do bloco
+24. Integral (soma balanceada variando 1 byte de IV/chave)
+25. Distribuição de bytes (qui-quadrado)
+26. Autocorrelação e periodicidade do keystream
+27. Bateria estatística de bits (monobit/runs/blocos)
+28. Teste serial (padrões de bits sobrepostos)
+29. Somas cumulativas (cusum)
+30. Entropia aproximada (ApEn vs controle aleatório)
+31. Complexidade linear (Berlekamp-Massey)
+32. Previsibilidade de bits (preditor por contexto)
+33. Correlação entre ciphertexts do mesmo plaintext
+34. Independência entre keystreams de propósitos diferentes (enc x mac)
+35. Validação do tamanho da chave
+36. Rejeição de chave incorreta
+37. Chaves degeneradas (zero, 0xFF, alternada, baixa entropia)
+38. Determinismo (vetor de referência key/iv fixos)
+39. Timing da verificação de integridade
+40. Bytes fixos entre tokens
+
+## Como escrever um novo ataque
+
+O contrato é o mesmo nas quatro linguagens: um ataque expõe um nome e um método
+`executar(alvo)` que devolve um `ResultadoAtaque` (vulnerável, severidade,
+detalhes). Ele recebe um **alvo** (`CriptografiaAlvo`) que abstrai a cifra e
+oferece:
+
+- `encrypt` / `decrypt`
+- `prefixo` / `tamanhoIv`
+- `decompor` / `recompor` (campos do token)
+- `gerarKeystreamBruto` e `checksumBruto` (camadas internas)
+- `chaveDeTeste`, `base64urlEncode` / `base64urlDecode`
+
+Se o alvo não expuser o que o ataque precisa, sinalize um **skip** — a suíte
+marca o ataque como "pulado" em vez de falhar.
+
+Resumo por linguagem (detalhes no README de cada pacote):
+
+| Linguagem | Arquivo | Contrato |
+| --- | --- | --- |
+| PHP | `src/Seguranca/Ataques/AtaqueX.php` | implementa `AtaqueInterface` (`nome`, `executar`) |
+| Node | `src/Seguranca/Ataques/AtaqueX.js` | classe com `nome()` e `executar(alvo)` |
+| Python | `src/Seguranca/Ataques/AtaqueX.py` | classe com `nome()` e `executar(alvo)` |
+| Bash | `src/Seguranca/Ataques/AtaqueX.sh` | função `AtaqueX` que preenche `ATQ_*` |
+
+Depois de criar o arquivo, registre o ataque no runner (`bin/executar_testes.*`)
+e rode a suíte. O passo a passo completo (testes locais, estilo e checklist) está
+em [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Resultado atual
+
+As quatro implementações resistem aos 40 ataques. Como as linguagens compartilham
+a mesma lógica byte a byte, o vetor de referência (chave `"K"` × 32, IV zero,
+propósito `enc`, 32 bytes) é idêntico em todas:
+
+```
+219a73a5bdb588b63187fa656d1492e0728c73ef526f6c525cf37cfb0f125249
+```
+
+## Notas de implementação
+
+- **Distâncias de difusão dobradas** (`[3,5,11,19,41,3,5,11,19,41]`) nas quatro
+  linguagens: ajuste que faz o ataque integral (soma balanceada) deixar de
+  distinguir a cifra de uma função aleatória.
+- **Bash**: o `gerar_keystream` e o `checksum` têm as rotações e o "passo"
+  embutidos nos laços (sem subshells), o que deixou a cifra ~24x mais rápida
+  mantendo a saída byte a byte idêntica. Os ataques usam `awk` para ponto
+  flutuante e amostras reduzidas.
+- **`AtaqueIdaEVoltaBinario` no bash** testa os bytes 1..255: bash não representa
+  NUL em strings.
+- **PHP** usa autoload PSR-4 (`Application\` → `src/`) e o script
+  `bin/runTest.php` carrega a chave via `.env` (veja `src/Env/DotEnv.php`).
